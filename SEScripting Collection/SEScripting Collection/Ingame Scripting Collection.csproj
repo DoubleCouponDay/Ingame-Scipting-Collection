@@ -58,6 +58,7 @@
     <Compile Include="BatteryDisplay.cs" />
     <Compile Include="BreakPoint.cs" />
     <Compile Include="massbrakes.cs" />
+    <Compile Include="OreDetectorSourceTest.cs" />
     <Compile Include="PBTTS.cs" />
     <Compile Include="phoneme finder.cs" />
     <Compile Include="Template.cs" />
