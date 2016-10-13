@@ -27,19 +27,27 @@ namespace Ingame_Scripting_Collection
         public void Main()
         {
             oreDetector.GetOreMarkers (ref oreMarkers);
-            debugConsole.WritePublicText ("", false);
+            debugConsole.WritePublicText ("oremarkers: " + oreMarkers.Count.ToString() + "\n", false);
+            debugConsole.WritePublicText ("detection range: " + oreDetector.Range.ToString() + "\n", true);
 
-            foreach (MyOreMarker marker in oreMarkers)
+            for (int i = 0; i < oreMarkers.Count; i++)
             {
-                debugConsole.WritePublicText (marker.ElementName, true);
-                debugConsole.WritePublicText (marker.Location.ToString() + @"\n\n", true);
-                debugConsole.ShowPublicTextOnScreen();
-            }            
+                double deltaX = oreDetector.GetPosition().X - oreMarkers[i].Location.X;
+                double deltaY = oreDetector.GetPosition().Y - oreMarkers[i].Location.Y;
+                double deltaZ = oreDetector.GetPosition().Z - oreMarkers[i].Location.Z;
+                double distance = Math.Sqrt (Math.Pow (deltaX, 2) + Math.Pow(deltaY, 2) + Math.Pow(deltaZ, 2));
+                
+                debugConsole.WritePublicText (oreMarkers[i].ElementName + ", " + 
+                                              "distance: " + distance.ToString() + "\n"
+                                              , true);
+            }                 
+            debugConsole.ShowPublicTextOnScreen();
+            Save();
         }
-
+        
         public void Save()
         {
-            timer.ApplyAction ("TriggerNow");
+            timer.ApplyAction ("Start");
         }
 #region POST_SCRIPT
     }    

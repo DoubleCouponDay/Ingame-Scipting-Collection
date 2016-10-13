@@ -26,7 +26,7 @@ namespace Ingame_Scripting_Collection
         void BreakPoint (string data_label, string data)
         {
             IMyTextPanel console = GridTerminalSystem.GetBlockWithName ("debug console") as IMyTextPanel;
-            console.WritePublicText (data_label + data, true); 
+            console.WritePublicText (data_label + data + "\n", true); 
             console.ShowPublicTextOnScreen ();    
         }
 
