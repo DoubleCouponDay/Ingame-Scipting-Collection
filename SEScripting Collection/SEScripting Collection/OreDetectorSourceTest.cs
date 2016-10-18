@@ -18,27 +18,24 @@ namespace Ingame_Scripting_Collection
 
         public Program()
         {
-            timer = GridTerminalSystem.GetBlockWithName ("timer") as IMyTimerBlock;
-            oreDetector = GridTerminalSystem.GetBlockWithName ("ore detector") as IMyOreDetector;
-            debugConsole = GridTerminalSystem.GetBlockWithName ("debug console") as IMyTextPanel;
+            timer = GridTerminalSystem.GetBlockWithName ("Timer Block") as IMyTimerBlock;
+            oreDetector = GridTerminalSystem.GetBlockWithName ("Ore Detector") as IMyOreDetector;
+            debugConsole = GridTerminalSystem.GetBlockWithName ("LCD Panel") as IMyTextPanel;
             oreMarkers = new List <MyOreMarker>();
         }
 
         public void Main()
         {
-            oreDetector.GetOreMarkers (ref oreMarkers);
+            oreDetector.GetOreMarkers (oreMarkers);
             debugConsole.WritePublicText ("oremarkers: " + oreMarkers.Count.ToString() + "\n", false);
-            debugConsole.WritePublicText ("detection range: " + oreDetector.Range.ToString() + "\n", true);
 
             for (int i = 0; i < oreMarkers.Count; i++)
-            {
-                double deltaX = oreDetector.GetPosition().X - oreMarkers[i].Location.X;
-                double deltaY = oreDetector.GetPosition().Y - oreMarkers[i].Location.Y;
-                double deltaZ = oreDetector.GetPosition().Z - oreMarkers[i].Location.Z;
-                double distance = Math.Sqrt (Math.Pow (deltaX, 2) + Math.Pow(deltaY, 2) + Math.Pow(deltaZ, 2));
+            {   
+                Vector3D difference = oreDetector.GetPosition() - oreMarkers[i].Location;
+                double absoluteDistance = Math.Round (Math.Sqrt (difference.LengthSquared()), 3);
                 
                 debugConsole.WritePublicText (oreMarkers[i].ElementName + ", " + 
-                                              "distance: " + distance.ToString() + "\n"
+                                              "distance: " + absoluteDistance.ToString() + "\n"
                                               , true);
             }                 
             debugConsole.ShowPublicTextOnScreen();

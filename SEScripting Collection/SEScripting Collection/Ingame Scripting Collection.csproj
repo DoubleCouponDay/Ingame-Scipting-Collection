@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sandbox.Common">
-      <HintPath>..\..\..\SE sauce compiled version\Sources\Sandbox.Common\bin\x64\Debug\Sandbox.Common.dll</HintPath>
+      <HintPath>..\..\..\SE sauce compiled version\Sources\SpaceEngineers.Game\bin\x64\Release\Sandbox.Common.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Game">
       <HintPath>..\..\..\SE sauce compiled version\Sources\SpaceEngineers.Game\bin\x64\Release\Sandbox.Game.dll</HintPath>
