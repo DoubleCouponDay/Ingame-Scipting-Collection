@@ -61,6 +61,7 @@
     <Compile Include="OreDetectorSourceTest.cs" />
     <Compile Include="PBTTS.cs" />
     <Compile Include="phoneme finder.cs" />
+    <Compile Include="PirateDrone.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TurretEvader.cs" />
