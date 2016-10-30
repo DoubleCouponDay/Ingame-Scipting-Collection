@@ -11,10 +11,44 @@ namespace Ingame_Scripting_Collection
     class PirateDrone : MyGridProgram
     {
 #endregion PRE_SCRIPT
-        List<IMyTerminalBlock> list = new List<IMyTerminalBlock>();   
+        List<IMyTerminalBlock> list = new List<IMyTerminalBlock>();  
+        IMyTimerBlock timer;
+         
+        IMyWarhead bomb;
+        IMySensorBlock sensor;
+        IMyShipMergeBlock mergeBlock;
 
-        void Main(string argument) 
-        { 
+        public Program()
+        {
+            timer = GridTerminalSystem.GetBlockWithName ("TIMER") as IMyTimerBlock;
+
+            bomb = GridTerminalSystem.GetBlockWithName ("BOMB") as IMyWarhead;
+            sensor = GridTerminalSystem.GetBlockWithName ("SENSOR") as IMySensorBlock;
+            mergeBlock = GridTerminalSystem.GetBlockWithName ("MERGE_BLOCK") as IMyShipMergeBlock;
+        }
+
+        public void Main (string argument) 
+        {            
+            if (sensor != null)
+            {
+                if (sensor.IsWorking && mergeBlock.Enabled) //sensor must turn off the merge block when it detects a player.
+                {
+                    bomb.SetValueFloat ("DetonationTime", 3.0F);
+                    bomb.SetValueBool ("Safety", false);
+                    bomb.ApplyAction ("StartCountdown");
+                }
+
+                else
+                {                    
+                    mergeBlock.ApplyAction ("OnOff_Off");
+                }
+            }
+
+            else
+            {
+                mergeBlock.ApplyAction ("OnOff_Off");
+            }
+
             Vector3D origin = new Vector3D (0, 0, 0); 
 
             if (this.Storage == null || this.Storage == "") 
@@ -82,6 +116,7 @@ namespace Ingame_Scripting_Collection
                     remote.SetAutoPilotEnabled (true); 
                 } 
             } 
+            timer.ApplyAction ("Start");
         }
 #region POST_SCRIPT
     }    

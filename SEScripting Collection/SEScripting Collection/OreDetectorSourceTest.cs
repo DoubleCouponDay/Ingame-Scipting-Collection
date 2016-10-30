@@ -25,8 +25,8 @@ namespace Ingame_Scripting_Collection
         }
 
         public void Main()
-        {
-            oreDetector.GetOreMarkers (oreMarkers);            
+        { 
+            oreDetector.GetOreMarkers (ref oreMarkers);            
             debugConsole.WritePublicText ("oremarkers: " + oreMarkers.Count.ToString() + "\n", false);
 
             for (int i = 0; i < oreMarkers.Count; i++)
