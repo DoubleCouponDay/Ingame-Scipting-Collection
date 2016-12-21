@@ -15,7 +15,6 @@ namespace Ingame_Scripting_Collection
         public void main()
         {
             testremote = GridTerminalSystem.GetBlockWithName ("REMOTE") as IMyRemoteControl;
-            int testInt = (Int32) MyPlanetElevation.Surface;
             testremote.TryGetPlanetElevation (MyPlanetElevation.Surface, out yeah);
         }
     }
