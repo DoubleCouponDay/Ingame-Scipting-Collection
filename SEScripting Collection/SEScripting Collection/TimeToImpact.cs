@@ -66,7 +66,7 @@ namespace Ingame_Scripting_Collection
  * + script must continue where it left off even after losing power,
  */
 
-      //public TimeToImpact()
+      //public TimeToImpact() //for debugging
         public Program()
         {   
             currentRefreshRate = Names.SLOW_REFRESH;     

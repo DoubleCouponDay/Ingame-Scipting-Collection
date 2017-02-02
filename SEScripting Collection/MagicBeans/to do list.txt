@@ -1,0 +1,5 @@
++ meow script
++ transceiver script
++ navigation script
++ kidneybean script
++ limabean script using painful sensor work
