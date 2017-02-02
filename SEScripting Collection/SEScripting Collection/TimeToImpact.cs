@@ -11,14 +11,32 @@ namespace Ingame_Scripting_Collection
     public class TimeToImpact : MyGridProgram
     {
 #endregion PRE_SCRIPT
-        const string FORWARD_CAM_NAME = "FORWARD CAM";
-        const string DOWN_CAM_NAME = "DOWN CAM";
-        const string TIMER_NAME = "IMPACT SCRIPT TIMER";
-        const string FAST_REFRESH = "TriggerNow";
-        const string SLOW_REFRESH = "Start";
-        const string INITIAL_GREETING = "Enter the name of the screen which TimeToImpact will append, then press run.";        
-        const string BEYOND_ANGLE = "Angle of raycast is beyond vision.";
+        static class Names
+        {
+            public const string FORWARD_CAM = "FORWARD CAM";
+            public const string DOWN_CAM = "DOWN CAM";
+            public const string TIMER = "IMPACT SCRIPT TIMER";
+            public const string FAST_REFRESH = "TriggerNow";
+            public const string SLOW_REFRESH = "Start";
+        }
+        
+        static class Messages
+        {
+            public const string INITIAL_GREETING = "Enter the name of the screen which TimeToImpact will append, then press run.";        
+            public const string BEYOND_ANGLE = "Angle of raycast is beyond vision.";
+        }        
+
+        enum RefreshTimes
+        {
+            Slow,
+            Fast,
+        }
         const float AT_REST = 0.0F;
+        const string EMPTY = "";
+                
+        bool initialised;    
+        string currentRefreshRate;  
+        double previousDistance;
 
         static IMyCameraBlock forwardCam;
         static IMyCameraBlock downCam;
@@ -26,10 +44,10 @@ namespace Ingame_Scripting_Collection
         static IMyTimerBlock timer;  
         static IMyShipController controlReadings;   
           
-        List <IMyTerminalBlock> queryResults;
+        List <IMyTerminalBlock> queryResults = new List <IMyTerminalBlock>();
         List <string> outputLines = new List <string>();
 
-        object[] nullCheckCollection = {
+        readonly object[] nullCheckCollection = {
             forwardCam,
             downCam,  
             outputDisplay,
@@ -37,14 +55,10 @@ namespace Ingame_Scripting_Collection
             controlReadings,
         };
 
-        object[] cameras = {
+        readonly List <IMyCameraBlock> cameras = new List<IMyCameraBlock>() {
             forwardCam,
             downCam,
-        };
-
-        bool initialised;
-        string LCDBlockName;        
-        string currentRefreshRate;        
+        };      
 
 /* Objectives:
  * + script must change its refresh rate based on how much time is left till impact,
@@ -54,9 +68,8 @@ namespace Ingame_Scripting_Collection
       //public TimeToImpact()
         public Program()
         {   
-            currentRefreshRate = SLOW_REFRESH;     
-            queryResults = new List <IMyTerminalBlock>();    
-            Echo (INITIAL_GREETING);            
+            currentRefreshRate = Names.SLOW_REFRESH;     
+            Echo (Messages.INITIAL_GREETING);            
         }
 
         public void Main (string input)
@@ -68,21 +81,12 @@ namespace Ingame_Scripting_Collection
 
             else
             {
-                MyShipVelocities currentVector = controlReadings.GetShipVelocities();
-                bool laserHitFailed = true;
-
-                for (int i = 0; i < cameras.Length; i++)
+                for (int i = default (int); i < cameras.Count; i++)
                 {                
-                    if (FireSelectedCam (cameras[i] as IMyCameraBlock, currentVector))
+                    if (FireSelectedCam (cameras[i] as IMyCameraBlock))
                     {
-                        laserHitFailed = false;
                         break;
-                    }                    
-                }
-
-                if (laserHitFailed)
-                {
-                    Print (AT_REST, AT_REST, AT_REST, BEYOND_ANGLE);
+                    }
                 }
                 Save();
             }
@@ -90,26 +94,26 @@ namespace Ingame_Scripting_Collection
 
         void TryBoot (string inputScreenName)
         {
-            if (inputScreenName == "")
+            if (inputScreenName == EMPTY)
             { 
-                Echo (INITIAL_GREETING);
+                Echo (Messages.INITIAL_GREETING);
             }
 
             else
             {
-                int nullCount = 0;
-                forwardCam = GridTerminalSystem.GetBlockWithName (FORWARD_CAM_NAME) as IMyCameraBlock;
-                downCam = GridTerminalSystem.GetBlockWithName (DOWN_CAM_NAME) as IMyCameraBlock;
+                int nullCount = default (int);
+                forwardCam = GridTerminalSystem.GetBlockWithName (Names.FORWARD_CAM) as IMyCameraBlock;
+                downCam = GridTerminalSystem.GetBlockWithName (Names.DOWN_CAM) as IMyCameraBlock;
                 outputDisplay = GridTerminalSystem.GetBlockWithName (inputScreenName) as IMyTextPanel;
-                timer = GridTerminalSystem.GetBlockWithName (TIMER_NAME) as IMyTimerBlock;
+                timer = GridTerminalSystem.GetBlockWithName (Names.TIMER) as IMyTimerBlock;
                 GridTerminalSystem.GetBlocksOfType <IMyShipController> (queryResults);
 
-                if (queryResults.Count > 0)
+                if (queryResults.Count > default (int))
                 {
-                    controlReadings = queryResults[0] as IMyShipController;
+                    controlReadings = queryResults[default (int)] as IMyShipController;
                 }
 
-                for (int i = 0; i < nullCheckCollection.Length; i++)
+                for (int i = default (int); i < nullCheckCollection.Length; i++)
                 {
                     if (nullCheckCollection[i] == null)
                     {
@@ -122,7 +126,7 @@ namespace Ingame_Scripting_Collection
                     Echo ("ERROR: Could not find screen with that name; Try again.");
                 }
 
-                else if (nullCount != 0)
+                else if (nullCount != default (int))
                 {
                     Echo ("ERROR: One of the blocks required has the wrong name or does not exist.");
                     Echo ("");
@@ -138,26 +142,60 @@ namespace Ingame_Scripting_Collection
             }            
         }
 
-        bool FireSelectedCam (IMyCameraBlock cameraChosen, MyShipVelocities currentVector)            
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="cameraChosen"></param>
+        /// <returns>True if hit obstacle.</returns>
+        bool FireSelectedCam (IMyCameraBlock cameraChosen)            
         {   
-            MyDetectedEntityInfo testFire = downCam.Raycast (currentVector.LinearVelocity);
-
-            if (testFire.IsEmpty() == false)
+            bool outcome = default (bool);
+                        
+            if (cameraChosen.CanScan (previousDistance))
             {
-                Vector3D? hitPosition = testFire.HitPosition;
-            } 
+                outcome = true;
+                Vector3D currentVector = controlReadings.GetShipVelocities().LinearVelocity;
+                MyDetectedEntityInfo testFire = cameraChosen.Raycast (currentVector);
+                
+                if (testFire.IsEmpty() == false)
+                {
+                    Vector3D hitPosition = (Vector3D) testFire.HitPosition;
+                    previousDistance = Vector3D.Distance (controlReadings.GetPosition(), hitPosition);
+                    previous Distance / currentVector.LinearVelocity
+                } 
+
+                else
+                {
+                    PrintAnalysis (float.NaN, float.NaN, float.NaN, Messages.BEYOND_ANGLE);
+                }
+            }
+
+            else //scans will regularly be beyond the charged range. should not print in this scenario.
+            {
+                outcome = false;
+            }
+            return outcome;
         }
 
-        void AdjustCastTime()
+        void AdjustCastTime (RefreshTimes inputRefreshTime)
         {
+            switch (inputRefreshTime)
+            {
+                case RefreshTimes.Slow:
+                    currentRefreshRate = Names.SLOW_REFRESH;
+                    break;
 
+                case RefreshTimes.Fast:
+                    currentRefreshRate = Names.FAST_REFRESH;
+                    break;
+            }
         }
         
-        void Print (float velocity, float destinationDistance, float timeOfArrival, string comment)
+        void PrintAnalysis (float velocity, float destinationDistance, float timeOfArrival, string comment)
         {
             outputLines.Clear();
 
-            if (comment != BEYOND_ANGLE)
+            if (comment != Messages.BEYOND_ANGLE)
             {
                 string velocityBuild = "\n velocity: " + velocity.ToString(); 
                 string destinationBuild = "\n distance: " + destinationDistance.ToString();
@@ -175,7 +213,7 @@ namespace Ingame_Scripting_Collection
 
             else
             {
-                outputLines.Add (BEYOND_ANGLE);
+                outputLines.Add (Messages.BEYOND_ANGLE);
             }
 
             for (int i = 0; i < outputLines.Count; i++)
