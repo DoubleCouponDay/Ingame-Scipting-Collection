@@ -31,6 +31,7 @@ namespace Ingame_Scripting_Collection
             Slow,
             Fast,
         }
+        const double PROXIMITY_BOUNDARY = 20.0F;
         const float AT_REST = 0.0F;
         const string EMPTY = "";
                 
@@ -161,7 +162,19 @@ namespace Ingame_Scripting_Collection
                 {
                     Vector3D hitPosition = (Vector3D) testFire.HitPosition;
                     previousDistance = Vector3D.Distance (controlReadings.GetPosition(), hitPosition);
-                    previous Distance / currentVector.LinearVelocity
+                    double speed = currentVector.Length();
+                    double timeToImpact = previousDistance / speed;
+                    PrintAnalysis (speed, previousDistance, timeToImpact, EMPTY);
+
+                    if (previousDistance < PROXIMITY_BOUNDARY)
+                    {
+                        AdjustCastTime (RefreshTimes.Fast);
+                    }
+
+                    else
+                    {
+                        AdjustCastTime (RefreshTimes.Slow);
+                    }
                 } 
 
                 else
@@ -191,7 +204,7 @@ namespace Ingame_Scripting_Collection
             }
         }
         
-        void PrintAnalysis (float velocity, float destinationDistance, float timeOfArrival, string comment)
+        void PrintAnalysis (double velocity, double destinationDistance, double timeOfArrival, string comment)
         {
             outputLines.Clear();
 
