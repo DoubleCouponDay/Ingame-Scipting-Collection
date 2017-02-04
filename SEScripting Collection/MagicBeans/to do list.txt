@@ -2,4 +2,22 @@
 + transceiver script
 + navigation script
 + kidneybean script
-+ limabean script using painful sensor work
++ test feasibility of ore detector revealed to api extender
++ limabean script
+
+KEY METHODS
+====================
++ weld unbuilt blocks by casting them to IMySlimBlock. cant get build ratio for armour though
+
++ MagicBean requires API extender to do assemblers
+
++ serialize data so that it may survive through session: this.Storage.
+
++ world oriented alignment for docking: IMyEnity.WorldMatrix
+	-https://en.wikipedia.org/wiki/Transformation_matrix#Rotation
+	-p2k : The matrix essentially contains four vectors, 
+the "positon" called Translation and three orientation vectors .Forward (-.Backward),
+ .Right (-.Left) and .Up (-.Down).
+	-transpose() matrix to remove the distance between
+
++ use linq / lambda to filter by any unreachable blocks

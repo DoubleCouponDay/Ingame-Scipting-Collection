@@ -5,6 +5,7 @@ using Sandbox.ModAPI.Ingame;
 using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using VRageMath;
+using VRage.Game.ModAPI.Ingame;
 
 namespace Ingame_Scripting_Collection
 {
@@ -69,6 +70,9 @@ namespace Ingame_Scripting_Collection
       //public TimeToImpact() //for debugging
         public Program()
         {   
+IMyRemoteControl test;
+            test.
+
             currentRefreshRate = Names.SLOW_REFRESH;     
             Echo (Messages.INITIAL_GREETING);            
         }
