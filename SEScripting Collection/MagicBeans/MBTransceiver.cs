@@ -27,9 +27,8 @@ namespace MagicBeans
 
         struct Messages
         {
-            public const string NULL_ERROR = "TRANSCEIVER ERROR: block is null ";
+            public const string NULL_ERROR = "TRANSCEIVER ERROR: block is null.";
         } 
-
         string serialMemory;
         static IMyRadioAntenna antenna;
 

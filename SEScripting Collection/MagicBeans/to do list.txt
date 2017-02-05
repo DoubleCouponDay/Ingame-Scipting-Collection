@@ -19,5 +19,3 @@ KEY METHODS
 the "positon" called Translation and three orientation vectors .Forward (-.Backward),
  .Right (-.Left) and .Up (-.Down).
 	-transpose() matrix to remove the distance between
-
-+ use linq / lambda to filter by any unreachable blocks
