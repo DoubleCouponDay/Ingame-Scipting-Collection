@@ -12,6 +12,7 @@ namespace Ingame_Scripting_Collection
     public class Template : MyGridProgram
     {
 #endregion PRE_SCRIPT
+#region in-game
 
 
         public Program()
@@ -28,6 +29,7 @@ namespace Ingame_Scripting_Collection
         {
 
         }
+#endregion in-game
 #region POST_SCRIPT
     }    
 }

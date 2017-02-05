@@ -9,9 +9,11 @@ KEY METHODS
 ====================
 + weld unbuilt blocks by casting them to IMySlimBlock. cant get build ratio for armour though
 
-+ MagicBean requires API extender to do assemblers
++ assembler API is a go! reference the component maker script 
 
 + serialize data so that it may survive through session: this.Storage.
+
++ maybe there is some base class i should invoke in Save()?
 
 + world oriented alignment for docking: IMyEnity.WorldMatrix
 	-https://en.wikipedia.org/wiki/Transformation_matrix#Rotation

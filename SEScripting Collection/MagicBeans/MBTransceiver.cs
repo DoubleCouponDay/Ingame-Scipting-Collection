@@ -12,6 +12,7 @@ namespace MagicBeans
     class MBTransceiver : MyGridProgram
     {
 #endregion PRE_SCRIPT
+#region in-game
         struct Names
         {
             public const string SCREEN = "DIAGNOSTICS SCREEN";
@@ -51,13 +52,16 @@ namespace MagicBeans
 
         public void Main (string input)
         {
-
+            IMyAssembler test;
+            IMyOreDetector test2;
+            test2.
         }
 
         public void Save()
         {                       
         }
-#region POST_SCRIPT
+        #endregion
+        #region POST_SCRIPT
     }    
 }
 #endregion POST_SCRIPT

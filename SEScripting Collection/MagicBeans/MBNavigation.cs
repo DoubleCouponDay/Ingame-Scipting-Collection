@@ -11,6 +11,7 @@ namespace MagicBeans
     class MBNavigation : MyGridProgram
     {
 #endregion PRE_SCRIPT
+#region in-game
 
 
         public Program()
@@ -27,7 +28,8 @@ namespace MagicBeans
         {
 
         }
-#region POST_SCRIPT
+        #endregion
+        #region POST_SCRIPT
     }    
 }
 #endregion POST_SCRIPT

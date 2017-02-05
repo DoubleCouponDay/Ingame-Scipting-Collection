@@ -11,7 +11,7 @@ namespace MagicBeans
     class Meow : MyGridProgram
     {
 #endregion PRE_SCRIPT
-
+#region in-game
 
 /*instructions: 
  * place sensor and timer on ship.
@@ -62,7 +62,8 @@ namespace MagicBeans
         {
             mergeBlock.ApplyAction ("OnOff_Off");
         }
-#region POST_SCRIPT
+        #endregion
+        #region POST_SCRIPT
     }    
 }
 #endregion POST_SCRIPT
