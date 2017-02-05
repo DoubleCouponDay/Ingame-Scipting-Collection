@@ -12,7 +12,6 @@ namespace MagicBeans
     {
 #endregion PRE_SCRIPT
 
-
         public Program()
         {
 
