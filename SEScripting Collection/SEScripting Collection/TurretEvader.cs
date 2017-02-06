@@ -49,7 +49,7 @@ namespace Ingame_Scripting_Collection
         }
 
         //this function will fetch objects from terminal only once in order to save performance.
-        void Initialize ()
+        void Initialize()
         {            
             GridTerminalSystem.GetBlocksOfType <IMyThrust> (thrusters);
             timer = GridTerminalSystem.GetBlockWithName ("script timer");

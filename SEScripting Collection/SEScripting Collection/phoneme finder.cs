@@ -13,7 +13,7 @@ namespace Ingame_Scripting_Collection
         internal const float max_volume = 1.0f;
         internal const float min_volume = 0.0f;
 
-        List <IMyTerminalBlock> speakers = new List <IMyTerminalBlock> ();
+        List <IMyTerminalBlock> speakers = new List <IMyTerminalBlock>();
         IMyTerminalBlock timer;
 
         internal List <int> delay = new List <int> ();
@@ -34,15 +34,15 @@ namespace Ingame_Scripting_Collection
             switch (argument) //with this logic, it will stop looping if you argue "stop" but you will need to press run when you argue "run".
             {
                 case "run;": 
-			        end_program = false;
-			        break; 
+                    end_program = false;
+                    break; 
         
                 case "stop;":
-			        end_program = true;
+                    end_program = true;
                     Stop ();
                     break;
 
-		        default:
+                default:
                     if (argument.Contains (";"))
                     {
                         Play (argument);
@@ -52,9 +52,9 @@ namespace Ingame_Scripting_Collection
                     {
                         Stop ();
                     }    
-			        break;
+                    break;
             }
-	
+    
             if (end_program == false)
             {
                 timer.ApplyAction ("TriggerNow");

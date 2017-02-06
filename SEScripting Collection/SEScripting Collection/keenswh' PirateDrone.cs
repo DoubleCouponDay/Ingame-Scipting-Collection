@@ -8,7 +8,7 @@ using VRageMath;
 
 namespace Ingame_Scripting_Collection
 {
-    class PirateDrone : MyGridProgram
+    class keenswh_PirateDrone : MyGridProgram
     {
 #endregion PRE_SCRIPT
         List<IMyTerminalBlock> list = new List<IMyTerminalBlock>();  
@@ -17,7 +17,7 @@ namespace Ingame_Scripting_Collection
         IMyWarhead bomb;
         IMySensorBlock sensor;
         IMyShipMergeBlock mergeBlock;
-
+/*
         public Program()
         {
             timer = GridTerminalSystem.GetBlockWithName ("TIMER") as IMyTimerBlock;
@@ -26,7 +26,7 @@ namespace Ingame_Scripting_Collection
             sensor = GridTerminalSystem.GetBlockWithName ("SENSOR") as IMySensorBlock;
             mergeBlock = GridTerminalSystem.GetBlockWithName ("MERGE_BLOCK") as IMyShipMergeBlock;
         }
-
+*/
         public void Main (string argument) 
         {            
             if (sensor != null)

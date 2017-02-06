@@ -50,20 +50,21 @@
     <Reference Include="VRage.Game">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\VRage.Game.dll</HintPath>
     </Reference>
+    <Reference Include="VRage.Library">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\VRage.Library.dll</HintPath>
+    </Reference>
     <Reference Include="VRage.Math">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\VRage.Math.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoAirlock.cs" />
     <Compile Include="BatteryDisplay.cs" />
     <Compile Include="BreakPoint.cs" />
     <Compile Include="massbrakes.cs" />
     <Compile Include="morphik%27s argument component maker.cs" />
-    <Compile Include="OreDetectorSourceTest.cs" />
     <Compile Include="PBTTS.cs" />
     <Compile Include="phoneme finder.cs" />
-    <Compile Include="PirateDrone.cs" />
+    <Compile Include="keenswh%27 PirateDrone.cs" />
     <Compile Include="remotecontrol test.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

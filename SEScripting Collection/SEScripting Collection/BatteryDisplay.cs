@@ -24,12 +24,12 @@ namespace Ingame_Scripting_Collection
         List <IMyReactor> reactors = new List <IMyReactor>();
         IMyTimerBlock timer;
         IMyTextPanel display;
-
+/*
         public Program() //constructor
         {
             endProgram = BootUp();
         }
-
+*/
         public bool BootUp()
         {
             bool justEndMyShitUp = false;
@@ -68,7 +68,8 @@ namespace Ingame_Scripting_Collection
         }
 
         public void Save() //save the state of the script
-        {            timer.ApplyAction ("Start");
+        {
+            timer.ApplyAction ("Start");
             totalPowerStored = 0.0M;
             totalCapacity = 0.0M;
         }

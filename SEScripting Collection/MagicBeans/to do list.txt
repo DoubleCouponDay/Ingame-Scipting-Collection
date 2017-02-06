@@ -1,5 +1,7 @@
-+ meow script
 + transceiver script
+	-make commands class
+	-test that vector3d inside a commands.Template are readonly.
+	-test tha vector3d's match gps pastes when converted to string
 + navigation script
 + kidneybean script
 + test feasibility of ore detector revealed to api extender

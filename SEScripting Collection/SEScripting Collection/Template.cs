@@ -14,12 +14,12 @@ namespace Ingame_Scripting_Collection
 #endregion PRE_SCRIPT
 #region in-game
 
-
+/*
         public Program()
         {
 
         }
-
+*/
         public void Main()
         {
 

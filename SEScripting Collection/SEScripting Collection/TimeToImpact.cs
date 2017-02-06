@@ -66,17 +66,14 @@ namespace Ingame_Scripting_Collection
  * + script must change its refresh rate based on how much time is left till impact,
  * + script must continue where it left off even after losing power,
  */
-
+ /*
       //public TimeToImpact() //for debugging
         public Program()
         {   
-IMyRemoteControl test;
-            test.
-
             currentRefreshRate = Names.SLOW_REFRESH;     
             Echo (Messages.INITIAL_GREETING);            
         }
-
+*/
         public void Main (string input)
         {           
             if (initialised == false)

@@ -25,7 +25,7 @@ namespace MagicBeans
         IMyShipMergeBlock mergeBlock;
         IMyWarhead bomb;
         IMyTimerBlock timer;
-
+/*
         public Program()
         {
             sensor = GridTerminalSystem.GetBlockWithName ("SENSOR") as IMySensorBlock;
@@ -33,7 +33,7 @@ namespace MagicBeans
             bomb = GridTerminalSystem.GetBlockWithName ("BOMB") as IMyWarhead;
             timer = GridTerminalSystem.GetBlockWithName ("TIMER") as IMyTimerBlock;
         }
-
+*/
         public void main()
         {
             if (sensor != null)

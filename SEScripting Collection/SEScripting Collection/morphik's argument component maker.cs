@@ -1,19 +1,18 @@
 ﻿#region PRE_SCRIPT
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Sandbox.ModAPI.Ingame;
 using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 using VRage.Game;
+using VRage.Library;
+using Sandbox.Game.GameSystems;
+using System.Text;
+using System.Collections.Generic;
+using System;
 
 namespace Ingame_Scripting_Collection
 {
-    class morphik_s_argument_component_maker
+    class morphiks_argument_component_maker : MyGridProgram
     {
 #endregion
         // This is the name of the assembler you want to control.   
@@ -82,12 +81,12 @@ namespace Ingame_Scripting_Collection
         private IMyProductionBlock assembler; 
         private StringBuilder dynamicContent = new StringBuilder(); 
  
- 
+/* 
         public Program() 
         { 
             InitialiseAssembler(); 
         } 
- 
+ */
         public bool InitialiseAssembler() 
         { 
             assembler = GridTerminalSystem.GetBlockWithName(assemblerName) as IMyProductionBlock; 
