@@ -18,7 +18,8 @@ namespace MagicBeans
             public const string UNASSIGNED = "UNASSIGNED";
             public const string SCREEN = "DIAGNOSTICS SCREEN";
             public const string ANTENNA = "RADIO ANTENNA";    
-            public const string NAV_SCRIPT_NAME = "PBNavigation";      
+            public const string NAV_SCRIPT_NAME = "PBNavigation";     
+            public const long OWNED_BY_NO_ONE = 0; 
         }
 
         struct Messages
@@ -65,7 +66,7 @@ namespace MagicBeans
             }                        
         }
 
-        bool compiled = true;
+        bool compiled = false;
         string serialMemory;
         static IMyRadioAntenna antenna;
 
@@ -74,16 +75,20 @@ namespace MagicBeans
         };
         
         public Program()
-        {
-            Me.CubeGrid.CustomName = "UNASSIGNED BEAN";
+        {            
             antenna = GridTerminalSystem.GetBlockWithName (Names.ANTENNA) as IMyRadioAntenna;            
-
-            for (int i = 0; i < nullCheckCollection.Length; i++)
+            
+            for (int i = 0; i < nullCheckCollection.Length; i++) 
             {
                 if (nullCheckCollection[i] == null)
                 {
                     Echo (Messages.NO_BLOCK);
                     compiled = false;
+                }
+
+                if (i == nullCheckCollection.Length - 1)
+                {
+                    
                 }
             }
         }
@@ -91,7 +96,7 @@ namespace MagicBeans
         //public static void Main (string serializedCommand)
         public void Main (string serializedCommand)
         {
-            if (compiled)
+            if (compiled == false)
             {
                 
             }

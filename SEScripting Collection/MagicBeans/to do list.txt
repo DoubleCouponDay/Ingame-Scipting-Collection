@@ -1,9 +1,11 @@
 + transceiver script
-	-make commands class
 	-test that vector3d inside a commands.Template are readonly.
 	-test tha vector3d's match gps pastes when converted to string
 + navigation script
+	-write grids name based on role
 + kidneybean script
+	-write grid name based on role
+	-possible to add MyDetectedEntityInfo to enemy list? or just fire on neutrals while its being hacked
 + test feasibility of ore detector revealed to api extender
 + limabean script
 

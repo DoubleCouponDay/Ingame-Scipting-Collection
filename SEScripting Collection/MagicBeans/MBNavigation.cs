@@ -29,7 +29,7 @@ namespace MagicBeans
 
         }
         #endregion
-        #region POST_SCRIPT
+#region POST_SCRIPT
     }    
 }
 #endregion POST_SCRIPT
