@@ -13,11 +13,11 @@ namespace Ingame_Scripting_Collection7
         //
         //bug 1: if you travel too fast towards the turret, it will catch your predictable vector.
 
-        List <IMyTerminalBlock> thrusters = new List <IMyTerminalBlock> ();
-        List <IMyTerminalBlock> left = new List <IMyTerminalBlock> ();
-        List <IMyTerminalBlock> up = new List <IMyTerminalBlock> ();
-        List <IMyTerminalBlock> right = new List <IMyTerminalBlock> ();
-        List <IMyTerminalBlock> down = new List <IMyTerminalBlock> ();
+        List <IMyTerminalBlock> thrusters = new List <IMyTerminalBlock>();
+        List <IMyTerminalBlock> left = new List <IMyTerminalBlock>();
+        List <IMyTerminalBlock> up = new List <IMyTerminalBlock>();
+        List <IMyTerminalBlock> right = new List <IMyTerminalBlock>();
+        List <IMyTerminalBlock> down = new List <IMyTerminalBlock>();
         IMyTerminalBlock timer;
         bool first_time = true;
         bool end_program = true;
