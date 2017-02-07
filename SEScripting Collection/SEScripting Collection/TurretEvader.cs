@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 
-namespace Ingame_Scripting_Collection
+namespace Ingame_Scripting_Collection7
 {
-    public class TurretEvader : MyGridProgram
+    public class Program : MyGridProgram
     {
         #endregion PRE_SCRIPT
         //auto turret evasion script

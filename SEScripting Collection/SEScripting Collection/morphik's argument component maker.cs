@@ -1,4 +1,4 @@
-﻿#region PRE_SCRIPT
+﻿
 using Sandbox.ModAPI.Ingame;
 using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
@@ -10,11 +10,11 @@ using System.Text;
 using System.Collections.Generic;
 using System;
 
-namespace Ingame_Scripting_Collection
+namespace Ingame_Scripting_Collection1
 {
-    class morphiks_argument_component_maker : MyGridProgram
+    class Program : MyGridProgram
     {
-#endregion
+#region in-game
         // This is the name of the assembler you want to control.   
 
         const string assemblerName = "Assembler"; 
@@ -81,12 +81,11 @@ namespace Ingame_Scripting_Collection
         private IMyProductionBlock assembler; 
         private StringBuilder dynamicContent = new StringBuilder(); 
  
-/* 
         public Program() 
         { 
             InitialiseAssembler(); 
         } 
- */
+
         public bool InitialiseAssembler() 
         { 
             assembler = GridTerminalSystem.GetBlockWithName(assemblerName) as IMyProductionBlock; 
@@ -212,5 +211,6 @@ namespace Ingame_Scripting_Collection
                 lcd.ShowPublicTextOnScreen(); 
             } 
         }
+#endregion in-game
     }
 }

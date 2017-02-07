@@ -1,14 +1,14 @@
-﻿#region PRE_SCRIPT
+﻿
 using System.Collections.Generic;
 
 using Sandbox.ModAPI.Ingame;
 using SpaceEngineers.Game.ModAPI.Ingame;
 
-namespace Ingame_Scripting_Collection
+namespace Ingame_Scripting_Collection6
 {
-    public class BatteryDisplay : MyGridProgram
+    public class Program : MyGridProgram
     {
-        #endregion PRE_SCRIPT
+#region in-game
         const string timersName = "battery display timer";       
         const string displaysName = "SFM readings";               
         const int kilowatts = 1000;
@@ -24,12 +24,12 @@ namespace Ingame_Scripting_Collection
         List <IMyReactor> reactors = new List <IMyReactor>();
         IMyTimerBlock timer;
         IMyTextPanel display;
-/*
-        public Program() //constructor
+
+        public Program()
         {
             endProgram = BootUp();
         }
-*/
+
         public bool BootUp()
         {
             bool justEndMyShitUp = false;
@@ -73,7 +73,6 @@ namespace Ingame_Scripting_Collection
             totalPowerStored = 0.0M;
             totalCapacity = 0.0M;
         }
-#region POST_SCRIPT
-    }    
+#endregion in-game
+    }
 }
-#endregion POST_SCRIPT

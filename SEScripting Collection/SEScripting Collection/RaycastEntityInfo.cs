@@ -5,10 +5,11 @@ using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 
-namespace Ingame_Scripting_Collection
+namespace Ingame_Scripting_Collection10
 {
-    class RaycastEntityIdTest : MyGridProgram
+    class Program : MyGridProgram
     {
+#region in-game
         IMyCameraBlock testCamera;
         IMyTimerBlock timer;
         List <IMyRadioAntenna> printer = new List <IMyRadioAntenna>();
@@ -23,9 +24,11 @@ namespace Ingame_Scripting_Collection
             if (testCamera.CanScan (100))
             {
                 MyDetectedEntityInfo info = testCamera.Raycast (100);
+                
                 printer[0].CustomName = info.Name + " / " + info.Relationship.ToString() + " / " + info.EntityId.ToString();
             }
             timer.ApplyAction ("TriggerNow");
         }
+#endregion in-game
     }
 }

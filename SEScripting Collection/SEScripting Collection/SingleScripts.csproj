@@ -60,12 +60,14 @@
   <ItemGroup>
     <Compile Include="BatteryDisplay.cs" />
     <Compile Include="BreakPoint.cs" />
+    <Compile Include="Elfi Wolfe%27s LIDAR.cs" />
     <Compile Include="massbrakes.cs" />
+    <Compile Include="Self Destruct.cs" />
     <Compile Include="morphik%27s argument component maker.cs" />
     <Compile Include="PBTTS.cs" />
     <Compile Include="phoneme finder.cs" />
     <Compile Include="keenswh%27 PirateDrone.cs" />
-    <Compile Include="Raycast entity id test.cs" />
+    <Compile Include="RaycastEntityInfo.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeToImpact.cs" />

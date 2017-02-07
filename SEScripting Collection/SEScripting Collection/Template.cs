@@ -1,4 +1,4 @@
-﻿#region PRE_SCRIPT
+﻿
 using System;
 using System.Collections.Generic;
 using Sandbox.ModAPI.Ingame;
@@ -7,19 +7,17 @@ using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 using VRage.Game;
 
-namespace Ingame_Scripting_Collection
+namespace SingleScript2
 {
-    public class Template : MyGridProgram
+    public class Program : MyGridProgram
     {
-#endregion PRE_SCRIPT
 #region in-game
 
-/*
         public Program()
         {
 
         }
-*/
+
         public void Main()
         {
 
@@ -30,7 +28,6 @@ namespace Ingame_Scripting_Collection
 
         }
 #endregion in-game
-#region POST_SCRIPT
-    }    
-}
-#endregion POST_SCRIPT
+    }
+}    
+

@@ -1,4 +1,4 @@
-﻿#region PRE_SCRIPT
+﻿
 using System;
 using System.Collections.Generic;
 using Sandbox.ModAPI.Ingame;
@@ -6,11 +6,10 @@ using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 
-namespace MagicBeans
+namespace SingleScripts1
 {
-    class Meow : MyGridProgram
+    class Program : MyGridProgram
     {
-#endregion PRE_SCRIPT
 #region in-game
 
 /*instructions: 
@@ -25,7 +24,7 @@ namespace MagicBeans
         IMyShipMergeBlock mergeBlock;
         IMyWarhead bomb;
         IMyTimerBlock timer;
-/*
+
         public Program()
         {
             sensor = GridTerminalSystem.GetBlockWithName ("SENSOR") as IMySensorBlock;
@@ -33,7 +32,7 @@ namespace MagicBeans
             bomb = GridTerminalSystem.GetBlockWithName ("BOMB") as IMyWarhead;
             timer = GridTerminalSystem.GetBlockWithName ("TIMER") as IMyTimerBlock;
         }
-*/
+
         public void main()
         {
             if (sensor != null)
@@ -62,8 +61,6 @@ namespace MagicBeans
         {
             mergeBlock.ApplyAction ("OnOff_Off");
         }
-        #endregion
-        #region POST_SCRIPT
+        #endregion in-game
     }    
 }
-#endregion POST_SCRIPT

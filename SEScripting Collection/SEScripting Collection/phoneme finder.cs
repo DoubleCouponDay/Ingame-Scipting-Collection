@@ -1,15 +1,15 @@
-#region PRE_SCRIPT
+
 using System;
 using System.Collections.Generic;
 using Sandbox.ModAPI.Ingame;
 using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 
-namespace Ingame_Scripting_Collection
+namespace Ingame_Scripting_Collection11
 {
-    public class PhonemeFinder : MyGridProgram
+    public class Program : MyGridProgram
     {
-#endregion PRE_SCRIPT
+#region in-game
         internal const float max_volume = 1.0f;
         internal const float min_volume = 0.0f;
 
@@ -61,7 +61,7 @@ namespace Ingame_Scripting_Collection
             }
         }
 
-        void Initialize ()
+        void Initialize()
         {
             first_time = false;  
             GridTerminalSystem.GetBlocksOfType <IMySoundBlock> (speakers);
@@ -127,7 +127,7 @@ namespace Ingame_Scripting_Collection
             }
         }
 
-        void Stop ()
+        void Stop()
         {
             playing = false;
             count_delay = false;
@@ -140,7 +140,6 @@ namespace Ingame_Scripting_Collection
                 speakers[a].ApplyAction ("StopSound");
             }    
         }
-#region POST_SCRIPT
+#endregion in-game
     }    
 }
-#endregion POST_SCRIPT

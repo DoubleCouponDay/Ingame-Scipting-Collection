@@ -1,4 +1,4 @@
-﻿#region PRE_SCRIPT
+﻿
 using System;
 using System.Collections.Generic;
 using Sandbox.ModAPI.Ingame;
@@ -6,18 +6,18 @@ using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 
-namespace Ingame_Scripting_Collection
+namespace Ingame_Scripting_Collection3
 {
-    class keenswh_PirateDrone : MyGridProgram
+    class Program : MyGridProgram
     {
-#endregion PRE_SCRIPT
+#region in-game
         List<IMyTerminalBlock> list = new List<IMyTerminalBlock>();  
         IMyTimerBlock timer;
          
         IMyWarhead bomb;
         IMySensorBlock sensor;
         IMyShipMergeBlock mergeBlock;
-/*
+
         public Program()
         {
             timer = GridTerminalSystem.GetBlockWithName ("TIMER") as IMyTimerBlock;
@@ -26,7 +26,7 @@ namespace Ingame_Scripting_Collection
             sensor = GridTerminalSystem.GetBlockWithName ("SENSOR") as IMySensorBlock;
             mergeBlock = GridTerminalSystem.GetBlockWithName ("MERGE_BLOCK") as IMyShipMergeBlock;
         }
-*/
+
         public void Main (string argument) 
         {            
             if (sensor != null)
@@ -118,7 +118,6 @@ namespace Ingame_Scripting_Collection
             } 
             timer.ApplyAction ("Start");
         }
-#region POST_SCRIPT
+        #endregion in-game
     }    
 }
-#endregion POST_SCRIPT

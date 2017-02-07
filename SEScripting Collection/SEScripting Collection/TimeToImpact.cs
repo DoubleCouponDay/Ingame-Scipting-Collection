@@ -1,4 +1,4 @@
-﻿#region PRE_SCRIPT
+﻿
 using System;
 using System.Collections.Generic;
 using Sandbox.ModAPI.Ingame;
@@ -7,11 +7,11 @@ using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 using VRage.Game.ModAPI.Ingame;
 
-namespace Ingame_Scripting_Collection
+namespace Ingame_Scripting_Collection8
 {
-    public class TimeToImpact : MyGridProgram
+    public class Program : MyGridProgram
     {
-#endregion PRE_SCRIPT
+#region in-game
         static class Names
         {
             public const string FORWARD_CAM = "FORWARD CAM";
@@ -66,14 +66,12 @@ namespace Ingame_Scripting_Collection
  * + script must change its refresh rate based on how much time is left till impact,
  * + script must continue where it left off even after losing power,
  */
- /*
-      //public TimeToImpact() //for debugging
         public Program()
         {   
             currentRefreshRate = Names.SLOW_REFRESH;     
             Echo (Messages.INITIAL_GREETING);            
         }
-*/
+
         public void Main (string input)
         {           
             if (initialised == false)
@@ -241,7 +239,6 @@ namespace Ingame_Scripting_Collection
         {
             timer.ApplyAction (currentRefreshRate);
         }
-#region POST_SCRIPT
+        #endregion in-game
     }    
 }
-#endregion POST_SCRIPT

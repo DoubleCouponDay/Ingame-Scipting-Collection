@@ -1,4 +1,4 @@
-﻿#region PRE_SCRIPT
+﻿
 using System;
 using System.Collections.Generic;
 using Sandbox.ModAPI.Ingame;
@@ -7,11 +7,10 @@ using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 using VRage.Game;
 
-namespace MagicBeans
+namespace MagicBeans3
 {
-    class MBTransceiver : MyGridProgram
+    class Program : MyGridProgram
     {
-#endregion PRE_SCRIPT
 #region in-game
         struct Names
         {
@@ -20,6 +19,8 @@ namespace MagicBeans
             public const string ANTENNA = "RADIO ANTENNA";    
             public const string NAV_SCRIPT_NAME = "PBNavigation";     
             public const long OWNED_BY_NO_ONE = 0; 
+            public const string FAST_REFRESH = "TriggerNow";
+            public const string SLOW_REFRESH = "Start";
         }
 
         struct Messages
@@ -27,21 +28,42 @@ namespace MagicBeans
             public const string NO_BLOCK = "TRANSCEIVER ERROR: Block not found.";
         } 
 
-        /// <summary>
-        ///Each MB command consists of an action, a target type, and a location. 
-        ///I only need to know the first two.
-        /// </summary>
         static class Commands //just need to remember that static objects in memory are not released until app closure.
         {
-            public static readonly string[] Actions = {
-                "ATTACK",
-                "RENAME",
-                "FOLLOW",
-                "GOTO",
-                "MINE",                                
-            };
+            public struct JobActions
+            {
+                public const string FOLLOW = "FOLLOW";
+                public const string MINE = "MINE";    
+                public const string BUILD = "BUILD";                          
+            }
 
-            struct Template
+            public struct PriorityActions
+            {
+                public const string GOTO = "GOTO";                        
+                public const string RENAME = "RENAME";
+                public const string STUCK = "STUCK";
+                public const string HELP = "HELP";
+            }
+
+            public struct Subjects
+            {
+                public const string BEANSTALK = "BEANSTALK";
+
+                public const string PLATINUM = "PLATINUM";
+                public const string GOLD = "GOLD";
+                public const string SILVER = "SILVER";
+                public const string SILICON = "SILICON";
+                public const string NICKEL = "NICKEL";
+                public const string URANIUM = "URANIUM";
+                public const string MAGNESIUM = "MAGNESIUM";
+                public const string IRON = "IRON";
+                public const string ICE = "ICE";
+
+                public const string KIDNEYBEAN_AUDIENCE = "KIDNEYBEAN";
+                public const string LIMABEAN_AUDIENCE = "LIMABEAN";                
+            }
+
+            public struct Template
             {
                 public readonly string SelectedAudience;
                 public readonly string Action;
@@ -73,23 +95,24 @@ namespace MagicBeans
         readonly object[] nullCheckCollection = {
             antenna,
         };
-        
-        public Program()
+       
+        public void Initialise()
         {            
-            antenna = GridTerminalSystem.GetBlockWithName (Names.ANTENNA) as IMyRadioAntenna;            
+            antenna = GridTerminalSystem.GetBlockWithName (Names.ANTENNA) as IMyRadioAntenna;       
+            int nullCount = default (int);     
             
             for (int i = 0; i < nullCheckCollection.Length; i++) 
             {
                 if (nullCheckCollection[i] == null)
                 {
+                    nullCount++;
                     Echo (Messages.NO_BLOCK);
-                    compiled = false;
                 }
-
-                if (i == nullCheckCollection.Length - 1)
-                {
-                    
-                }
+            }
+            
+            if (nullCount == default (int))
+            {
+                compiled = true;
             }
         }
 
@@ -98,15 +121,19 @@ namespace MagicBeans
         {
             if (compiled == false)
             {
-                
+
+            }
+
+            else
+            {
+                Initialise();
             }
         }
 
         public void Save() //called by game on session close.
         {                       
         }
-#endregion
-#region POST_SCRIPT
+#endregion in-game
     }    
 }
-#endregion POST_SCRIPT
+

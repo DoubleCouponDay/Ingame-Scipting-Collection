@@ -1,4 +1,4 @@
-#region PRE_SCRIPT
+
 using System;
 using System.Collections.Generic;
 using Sandbox.ModAPI.Ingame;
@@ -6,18 +6,18 @@ using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 
-namespace Ingame_Scripting_Collection
+namespace Ingame_Scripting_Collection5
 {
-    public class Breakpoint : MyGridProgram
+    public class Program : MyGridProgram
     {
-#endregion PRE_SCRIPT
+#region in-game
 
-/*
+
         public Program()
         {
 
         }
-*/
+
         public void Main()
         {
 
@@ -34,10 +34,10 @@ namespace Ingame_Scripting_Collection
         {
 
         }
-#region POST_SCRIPT
-    }    
+#endregion in-game
+    }
 }
-#endregion POST_SCRIPT
+
 
 
 
