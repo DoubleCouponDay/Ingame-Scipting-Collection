@@ -5,12 +5,13 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{76848712-DAEE-4D3D-A205-85CFA84CD1E2}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ingame_Scripting_Collection</RootNamespace>
     <AssemblyName>Ingame Scripting Collection</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,15 +31,90 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HavokWrapper">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\HavokWrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="InfinarioSDK">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\InfinarioSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="Logging">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="ManagedCuda">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\ManagedCuda.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\OpenTK.dll</HintPath>
+    </Reference>
     <Reference Include="Sandbox.Common">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\Sandbox.Common.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Game">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\Sandbox.Game.dll</HintPath>
     </Reference>
+    <Reference Include="Serilog.FullNetFx">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\Serilog.FullNetFx.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.D3DCompiler">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SharpDX.D3DCompiler.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Desktop">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SharpDX.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SharpDX.Direct2D1.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectInput">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SharpDX.DirectInput.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Mathematics">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SharpDX.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.XAudio2">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SharpDX.XAudio2.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleInjector">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SimpleInjector.dll</HintPath>
+    </Reference>
     <Reference Include="SpaceEngineers.Game">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SpaceEngineers.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="SpaceEngineers.ObjectBuilders">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SpaceEngineers.ObjectBuilders.dll</HintPath>
+    </Reference>
+    <Reference Include="SpaceEngineers.ObjectBuilders.XmlSerializers">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\SpaceEngineers.ObjectBuilders.XmlSerializers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -60,11 +137,11 @@
   <ItemGroup>
     <Compile Include="BatteryDisplay.cs" />
     <Compile Include="BreakPoint.cs" />
+    <Compile Include="Debugger.cs" />
     <Compile Include="Elfi Wolfe%27s LIDAR.cs" />
     <Compile Include="massbrakes.cs" />
-    <Compile Include="Self Destruct.cs" />
+    <Compile Include="ProximitySelfDestruct.cs" />
     <Compile Include="morphik%27s argument component maker.cs" />
-    <Compile Include="PBTTS.cs" />
     <Compile Include="phoneme finder.cs" />
     <Compile Include="keenswh%27 PirateDrone.cs" />
     <Compile Include="RaycastEntityInfo.cs" />

@@ -1,19 +1,26 @@
 + transceiver script
-	-test that vector3d inside a commands.Template are readonly.
-	-test tha vector3d's match gps pastes when converted to string
+	-test if new line is a good way of seperating the custom data
+	-variables grouped into models vs grouped by comment
+	-which are better for grouping named const strings? static class or struct?
+	-can i get enums length
+	-test that vector3d.TryParse() works well.
+	-test that vector3d's match gps pastes when converted to string
 + navigation script
 	-write grids name based on role
 + kidneybean script
+	-should be alter its course when sensor detects collision. it should keep going without stopping.
 	-write grid name based on role
 	-possible to add MyDetectedEntityInfo to enemy list? or just fire on neutrals while its being hacked
-+ test feasibility of ore detector revealed to api extender
++ test feasibility of making a new ore detector block similar to beam drill
 + limabean script
 
 KEY METHODS
 ====================
++ all drones should have turret evasion but should check for room to move is clear using dynamic sensor range.
+
 + weld unbuilt blocks by casting them to IMySlimBlock. cant get build ratio for armour though
 
-+ assembler API is a go! reference the component maker script 
++ 
 
 + serialize data so that it may survive through session: this.Storage.
 
