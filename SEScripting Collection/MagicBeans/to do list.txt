@@ -1,10 +1,12 @@
 + transceiver script
-	-test if new line is a good way of seperating the custom data
-	-variables grouped into models vs grouped by comment
-	-which are better for grouping named const strings? static class or struct?
+	-test if entity id changes when merged or connected
+	-merged conveyor block or connector?
+	-test if new line is consumed or if it attaches to the command
 	-can i get enums length
-	-test that vector3d.TryParse() works well.
 	-test that vector3d's match gps pastes when converted to string
+	-test that vector3D has no spaces inside it which could mess with my string -> vector conversion method
+	-test that main's parameter doesnt need to have a specific name
+	-test that WritePublicText (StringBuilder) works
 + navigation script
 	-write grids name based on role
 + kidneybean script
@@ -16,15 +18,17 @@
 
 KEY METHODS
 ====================
++ add the command your currently working on into this.storage
+
++ magic beans that are friendly share the same drones. how does that effect each master's allocation? divide resources evenly until an emergency?
+	-what is the signal for two magic beans to network?  do they even need to?
+	-entity id will change if two items are merged.
+
 + all drones should have turret evasion but should check for room to move is clear using dynamic sensor range.
 
 + weld unbuilt blocks by casting them to IMySlimBlock. cant get build ratio for armour though
 
-+ 
-
-+ serialize data so that it may survive through session: this.Storage.
-
-+ maybe there is some base class i should invoke in Save()?
++ serialize data so that it may survive through session: this.Storage used with Save()
 
 + world oriented alignment for docking: IMyEnity.WorldMatrix
 	-https://en.wikipedia.org/wiki/Transformation_matrix#Rotation

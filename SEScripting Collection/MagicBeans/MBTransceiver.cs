@@ -18,8 +18,9 @@ namespace MagicBeans3
         {
             public const string SCREEN = "DIAGNOSTICS SCREEN";
             public const string ANTENNA = "RADIO ANTENNA";              
-            public const string REPEATER = "MBRepeater";    
+            public const string MY_CONSOLE_NAME = "MBTransceiver: ";   
             public const string NEW_LINE = "\n";
+            public const char SPACE = ' ';           
         }
 
         struct Messages
@@ -27,15 +28,15 @@ namespace MagicBeans3
             public const string NO_BLOCK = "TRANSCEIVER ERROR: Block not found; ";
         } 
 
-        bool compiled = false;
-        string serialMemory;
+        bool compiled;
 
         static IMyRadioAntenna antenna;
         static IMyTextPanel console;
-        static IMyProgrammableBlock definingModule;
+        static IMyProgrammableBlock definingModule; //assuming MBTransceiver will only ever be used with one defining module.
+        static StringBuilder concatLite; //Im assuming ill invoke Clear() on this every time I finish using this.
         List <IMyProgrammableBlock> allModules;
         List <InteractionModel> models;
-        public static readonly StringBuilder concatLite = new StringBuilder(); //Im assuming ill invoke Clear() on this every time I finish using this.
+        
                 
         List <object> nullCheckCollection = new List <object>()
         {
@@ -45,7 +46,9 @@ namespace MagicBeans3
        
         public void Initialise()
         {   
+            bool allSystemsGo = true;
             int nullCount = default (int);              
+            concatLite = new StringBuilder();
             antenna = GridTerminalSystem.GetBlockWithName (Names.ANTENNA) as IMyRadioAntenna;       
             console = GridTerminalSystem.GetBlockWithName (Names.SCREEN) as IMyTextPanel;
             allModules = new List <IMyProgrammableBlock>();
@@ -149,6 +152,12 @@ namespace MagicBeans3
                     allModules.Clear();
                     break; //each user of this script is only expected to have one of the defining modules.
                 }
+
+                else if (i == allModules.Count - 1) //assuming success state will break away before this happens.
+                {
+                    allSystemsGo = false;
+                    Echo (Messages.NO_BLOCK);
+                }
             }
             
             for (int i = 0; i < nullCheckCollection.Count; i++) 
@@ -157,24 +166,23 @@ namespace MagicBeans3
                 {
                     nullCount++;
                 }
-            } 
-            
-            if (nullCount != default (int))
-            {
-                Echo (Messages.NO_BLOCK + nullCount.ToString());
-            }
 
-            else
-            {
-                compiled = true;
-            }
+                else if (i == nullCheckCollection.Count - 1 &&
+                         nullCount != default (int))
+                {
+                    allSystemsGo = false;
+                    Echo (Messages.NO_BLOCK + nullCount.ToString());
+                }                
+            } 
+            compiled = allSystemsGo;
         }
 
         public void main (string serializedCommand)
         {              
             if (compiled)
-            {
-                AnalyseForCommand (serializedCommand);                    
+            {                
+                AnalyseForCommand (serializedCommand);  
+                CheckForInternalCommunication();                  
             }
 
             else
@@ -183,61 +191,135 @@ namespace MagicBeans3
             }
         }
 
+        /// <summary>
+        /// Analyses string input if there was a transmission received.
+        /// </summary>
+        /// <param name="input"></param>
         void AnalyseForCommand (string input)
         {
             string noEscapes = string.Format (@"{0}", input);
-            string singleCase = noEscapes.ToUpper();            
-            string[] sectionedUp = singleCase.Split (' ');
+            string singleCase = noEscapes.ToUpper(); //assuming that an interaction model is all upper.
+            Command possibleCommand = TryCreateCommand (singleCase);
 
-            if (sectionedUp.Length == Command.COMMAND_LENGTH)
+            if (possibleCommand.IsEmpty == false &&
+                possibleCommand.CommunicationScope == InteractionModel.CommunicationScopes.EXTERNAL)
             {
-                Vector3D possibleVector;
+                ApplyCommand (possibleCommand);
+            }                    
+        }
 
-                if (Vector3D.TryParse (sectionedUp[Command.COMMAND_LENGTH - 1], out possibleVector))
+        /// <summary>
+        ///Checks customdata storage for an internal communication.
+        /// </summary>
+        void CheckForInternalCommunication()
+        {
+            string[] procedureList = Me.CustomData.Split (new string[] { Names.NEW_LINE }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (procedureList.Length >= default (int))
+            {
+                Command possibleCommand = TryCreateCommand (procedureList[default (int)]);
+
+                if (possibleCommand.IsEmpty == false &&
+                    possibleCommand.CommunicationScope == InteractionModel.CommunicationScopes.INTERNAL)
                 {
-                    Command orderReceived = new Command (sectionedUp[0],
-                                                         sectionedUp[1],
-                                                         sectionedUp[2],
-                                                         sectionedUp[3],
-                                                         possibleVector
-                                                        );
-                    ApplyCommand (orderReceived);
-                }
+                    ApplyCommand (possibleCommand);
+                }       
             }
         }
 
         /// <summary>
-        /// Method will convert an internally received message to an external tranmission.
-        /// Similarly, an external transmission received will be converted to an internal message between modules.
+        /// If conversion from string to Command was successful, returned command's property bool IsEmpty will be false.
+        /// If conversion failed, it will be true.
         /// </summary>
-        /// <param name="command"></param>
-        void ApplyCommand (Command command)
+        /// <param name="serialisedCommand"></param>
+        /// <param name="possibleSuccessOutput"></param>
+        Command TryCreateCommand (string serialisedCommand)
         {
-            if (command.CommunicationScope == InteractionModel.CommunicationScopes.INTERNAL)
-            {
-                concatLite.Append (InteractionModel.CommunicationScopes.EXTERNAL);
-                concatLite.Append (" ");
-                concatLite.Append (command.Formatted);
-                string outPacket = concatLite.ToString();
-                concatLite.Clear();
-                antenna.TransmitMessage (outPacket);
-            }
+            Command possibleSuccessOutput = new Command(); //Im returning a value type so it must be immutable.
+            string[] sectionedString = serialisedCommand.Split (Names.SPACE);
 
-            else if (command.CommunicationScope == InteractionModel.CommunicationScopes.EXTERNAL)
+            if (sectionedString.Length == Command.LENGTH)
             {
-                if (command.SelectedAudience == definingModule.CustomName ||
-                    command.SelectedAudience == Me.CubeGrid.EntityId.ToString())
+                Vector3D possibleVector;
+
+                if (Vector3D.TryParse (sectionedString[Command.LENGTH - 1], out possibleVector))
                 {
-                    concatLite.Append (InteractionModel.CommunicationScopes.EXTERNAL);
-                    concatLite.Append (" ");
-                    concatLite.Append (command.Formatted);
-                    string inPacket = concatLite.ToString();
-                    concatLite.Clear();
-                    definingModule.CustomData += Names.NEW_LINE + inPacket; //Alternative to TryRun (string) because that way cant run an already running PB. I cant predict that.
-
+                    possibleSuccessOutput = new Command (sectionedString[0],
+                                                         sectionedString[1],
+                                                         sectionedString[2],
+                                                         sectionedString[3],
+                                                         possibleVector
+                                                        );
                 }
             }
+            return possibleSuccessOutput;
         }
+
+        void ApplyCommand (Command command)
+        {
+            string output = default (string); 
+
+            switch (command.CommunicationScope)
+            {
+                case InteractionModel.CommunicationScopes.INTERNAL:
+                    output = serializeOutputCommand (command, InteractionModel.CommunicationScopes.EXTERNAL);
+                    antenna.TransmitMessage (output);
+
+                    break;
+
+                case InteractionModel.CommunicationScopes.EXTERNAL:
+                    if (command.SelectedAudience == definingModule.CustomName ||
+                        command.SelectedAudience == Me.CubeGrid.EntityId.ToString())
+                    {
+                        output = serializeOutputCommand (command, InteractionModel.CommunicationScopes.INTERNAL);
+                        definingModule.CustomData += Names.NEW_LINE + output;
+                    }
+                    break;
+            }
+
+            if (output != default (string))
+            {
+                PrintToConsole (output);
+            }            
+        }
+
+        /// <summary>
+        /// An output command is a received message combined with a communication scope opposite of the received one.
+        /// Method will serialize all that and return it to you.
+        /// </summary>
+        /// <param name="receivedCommand"></param>
+        /// <param name="outputsScope"></param>
+        /// <returns></returns>
+        string serializeOutputCommand (Command receivedCommand, string outputsScope)
+        {
+            concatLite.Append (outputsScope);
+            concatLite.Append (Names.SPACE);            
+            concatLite.Append (receivedCommand.SelectedAudience);
+            concatLite.Append (Names.SPACE);
+            concatLite.Append (receivedCommand.Action);
+            concatLite.Append (Names.SPACE);
+            concatLite.Append (receivedCommand.Subject);
+            concatLite.Append (Names.SPACE);
+            concatLite.Append (receivedCommand.Location.ToString());
+            string output = concatLite.ToString();
+            concatLite.Clear();
+            return output;
+        }
+
+        /// <summary>
+        /// reads the paragraph in IMyTextPanel console and prints a new paragraph with message at the top.
+        /// </summary>
+        void PrintToConsole (string message)
+        {
+            string previousPrint = console.GetPublicText();
+            concatLite.Append (Names.MY_CONSOLE_NAME);
+            concatLite.Append (message);
+            concatLite.Append (Names.NEW_LINE);
+            concatLite.Append (previousPrint);
+            console.WritePublicText (concatLite);
+            concatLite.Clear();
+            console.ShowPublicTextOnScreen();
+        } 
 
         public void Save() //called by game on session close.
         {                       
@@ -255,11 +337,17 @@ namespace MagicBeans3
                 LIMABEAN,
             }
 
+            public enum ScopesMatchingEnum
+            {
+                INTERNAL,
+                EXTERNAL,
+            }   
+            
             public static class CommunicationScopes
             {
-                public const string EXTERNAL = "EXTERNAL";
                 public const string INTERNAL = "INTERNAL";
-            }
+                public const string EXTERNAL = "EXTERNAL";
+            }         
 
             /// <summary>
             /// entity id is a universal audience type for a single entity.
@@ -333,7 +421,11 @@ namespace MagicBeans3
 
         public class Command
         {
-            public const int COMMAND_LENGTH = 5;
+            /// <summary>
+            /// Will be true if you use the empty constructor overload.
+            /// </summary>
+            public readonly bool IsEmpty;
+            public const int LENGTH = 5;
 
             public readonly string CommunicationScope;
             public readonly string SelectedAudience; //can be entity Id
@@ -345,7 +437,12 @@ namespace MagicBeans3
             /// Communication scope is not added to the serialised command "Formatted".
             /// This is to ensure it can be easily appended to the front when you need to.
             /// </summary>
-            public string Formatted { get; private set; }                  
+            public string Formatted { get; private set; }                
+            
+            public Command()
+            {
+                IsEmpty = true;
+            }
 
             public Command (string communicationScope, string selectedAudience, string action, string subject, Vector3D location)
             {               
@@ -354,16 +451,6 @@ namespace MagicBeans3
                 this.Action = action;
                 this.Subject = subject;
                 this.Location = location;
-
-                concatLite.Append (SelectedAudience);
-                concatLite.Append (" ");
-                concatLite.Append (Action);
-                concatLite.Append (" ");
-                concatLite.Append (Subject);
-                concatLite.Append (" ");
-                concatLite.Append (location.ToString());
-                Formatted = concatLite.ToString();
-                concatLite.Clear(); //think about other methods using the same stringBuilder. clean up after yourself.
             } 
         }   
 #endregion in-game
