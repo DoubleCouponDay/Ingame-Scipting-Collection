@@ -6,6 +6,7 @@ using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 using VRage.Game;
+using System.Collections.ObjectModel;
 
 namespace SingleScript2
 {
