@@ -5,12 +5,12 @@ using Sandbox.ModAPI.Ingame;
 using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using VRageMath;
+using VRage.Game;
 
-namespace MagicBeans2
+namespace MagicBeans6665
 {
-    class Program : MyGridProgram
+    public class Program : MyGridProgram
     {
-
 #region in-game
 
         public Program()
@@ -28,5 +28,5 @@ namespace MagicBeans2
 
         }
 #endregion in-game
-    }    
+    }
 }

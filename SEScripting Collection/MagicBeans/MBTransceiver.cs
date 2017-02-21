@@ -34,9 +34,7 @@ namespace MagicBeans3
         static IMyTextPanel console;
         static IMyProgrammableBlock definingModule; //assuming MBTransceiver will only ever be used with one defining module.
         static StringBuilder concatLite; //Im assuming ill invoke Clear() on this every time I finish using this.
-        List <IMyProgrammableBlock> allModules;
-        List <InteractionModel> models;
-        
+        List <IMyProgrammableBlock> allModules;        
                 
         List <object> nullCheckCollection = new List <object>()
         {
@@ -54,98 +52,100 @@ namespace MagicBeans3
             allModules = new List <IMyProgrammableBlock>();
             GridTerminalSystem.GetBlocksOfType (allModules);
 
-            InteractionModel magicBeanModel = new InteractionModel 
+            CommunicationModel beanStalkModel = new CommunicationModel 
             (
-                InteractionModel.SupportedModels.MAGICBEAN,
+                CommunicationModel.SupportedModelIdentities.BEANSTALK,
 
                 new string[] 
                 {
-                    InteractionModel.Audiences.MAGICBEANS,
-                    InteractionModel.Audiences.LIMABEANS,
-                    InteractionModel.Audiences.KIDNEYBEANS,
+                    CommunicationModel.Audiences.BEANSTALK,
+                    CommunicationModel.Audiences.LIMABEAN,
+                    CommunicationModel.Audiences.KIDNEYBEAN,
                 },
 
-                new string[] { },
+                new string[] {},
 
                 new string[]
                 {
-                    InteractionModel.PriorityActions.NETWORK,
-                    InteractionModel.PriorityActions.BACKUP,
+                    CommunicationModel.PriorityActions.NETWORK,
+                    CommunicationModel.PriorityActions.HELP,
                 },
 
                 new string[]
                 {
-                    InteractionModel.Subjects.ENEMY,
+                    CommunicationModel.Audiences.BEANSTALK,
+                    CommunicationModel.Subjects.ENEMY,
+                    CommunicationModel.Subjects.STUCK,
                 }
             );
 
-            InteractionModel kidneyBeanModel = new InteractionModel
+            CommunicationModel kidneyBeanModel = new CommunicationModel
             (
-                InteractionModel.SupportedModels.KIDNEYBEAN,
+                CommunicationModel.SupportedModelIdentities.KIDNEYBEAN,
 
                 new string[]
                 {
-                    InteractionModel.Audiences.MAGICBEANS,
+                    CommunicationModel.Audiences.BEANSTALK,
                 },
 
                 new string[]
                 {
-                    InteractionModel.JobActions.FOLLOW,
+                    CommunicationModel.JobActions.FOLLOW,
                 },
 
                 new string[]
                 {
-                    InteractionModel.PriorityActions.ATTACK,
-                    InteractionModel.PriorityActions.GOTO,
+                    CommunicationModel.PriorityActions.ATTACK,
+                    CommunicationModel.PriorityActions.GOTO,
                 },
 
                 new string[]
                 {
-                    InteractionModel.Subjects.ENEMY,
-                    InteractionModel.Subjects.NEUTRAL,
+                    CommunicationModel.Subjects.ENEMY,
+                    CommunicationModel.Subjects.NEUTRAL,
                 }
             );
 
 
-            InteractionModel limaBeanModel = new InteractionModel
+            CommunicationModel limaBeanModel = new CommunicationModel
             (
-                InteractionModel.SupportedModels.LIMABEAN,
+                CommunicationModel.SupportedModelIdentities.LIMABEAN,
                 
                 new string[]
                 {
-                    InteractionModel.Audiences.MAGICBEANS,
+                    CommunicationModel.Audiences.BEANSTALK,
                 },
 
                 new string[]
                 {
-                    InteractionModel.JobActions.MINE,
-                    InteractionModel.JobActions.FOLLOW,
+                    CommunicationModel.JobActions.MINE,
+                    CommunicationModel.JobActions.FOLLOW,
                 },
 
                 new string[]
                 {
-                    InteractionModel.PriorityActions.GOTO,
+                    CommunicationModel.PriorityActions.GOTO,
                 },
 
                 new string[]
                 {
-                    InteractionModel.Subjects.GOLD,
-                    InteractionModel.Subjects.ICE,
-                    InteractionModel.Subjects.IRON,
-                    InteractionModel.Subjects.MAGNESIUM,
-                    InteractionModel.Subjects.NICKEL,
-                    InteractionModel.Subjects.PLATINUM,
-                    InteractionModel.Subjects.SILICON,
-                    InteractionModel.Subjects.SILVER,
-                    InteractionModel.Subjects.URANIUM,
+                    CommunicationModel.Subjects.GOLD,
+                    CommunicationModel.Subjects.ICE,
+                    CommunicationModel.Subjects.IRON,
+                    CommunicationModel.Subjects.MAGNESIUM,
+                    CommunicationModel.Subjects.NICKEL,
+                    CommunicationModel.Subjects.PLATINUM,
+                    CommunicationModel.Subjects.SILICON,
+                    CommunicationModel.Subjects.SILVER,
+                    CommunicationModel.Subjects.URANIUM,
                 }
             );
 
             for (int i = 0; i < allModules.Count; i++)
             {
-                if (allModules[i].CustomName == InteractionModel.Audiences.KIDNEYBEANS ||
-                    allModules[i].CustomName == InteractionModel.Audiences.LIMABEANS ||
-                    allModules[i].CustomName == InteractionModel.Audiences.MAGICBEANS)
+                if (allModules[i].CustomName == CommunicationModel.Audiences.KIDNEYBEAN ||
+                    allModules[i].CustomName == CommunicationModel.Audiences.LIMABEAN ||
+                    allModules[i].CustomName == CommunicationModel.Audiences.BEANSTALK)
                 {
                     definingModule = allModules[i];
                     nullCheckCollection.Add (definingModule);
@@ -202,7 +202,7 @@ namespace MagicBeans3
             Command possibleCommand = TryCreateCommand (singleCase);
 
             if (possibleCommand.IsEmpty == false &&
-                possibleCommand.CommunicationScope == InteractionModel.CommunicationScopes.EXTERNAL)
+                possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.EXTERNAL)
             {
                 ApplyCommand (possibleCommand);
             }                    
@@ -220,7 +220,7 @@ namespace MagicBeans3
                 Command possibleCommand = TryCreateCommand (procedureList[default (int)]);
 
                 if (possibleCommand.IsEmpty == false &&
-                    possibleCommand.CommunicationScope == InteractionModel.CommunicationScopes.INTERNAL)
+                    possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.INTERNAL)
                 {
                     ApplyCommand (possibleCommand);
                 }       
@@ -261,17 +261,16 @@ namespace MagicBeans3
 
             switch (command.CommunicationScope)
             {
-                case InteractionModel.CommunicationScopes.INTERNAL:
-                    output = serializeOutputCommand (command, InteractionModel.CommunicationScopes.EXTERNAL);
+                case CommunicationModel.CommunicationScopes.INTERNAL:
+                    output = serializeOutputCommand (command, CommunicationModel.CommunicationScopes.EXTERNAL);
                     antenna.TransmitMessage (output);
-
                     break;
 
-                case InteractionModel.CommunicationScopes.EXTERNAL:
-                    if (command.SelectedAudience == definingModule.CustomName ||
+                case CommunicationModel.CommunicationScopes.EXTERNAL:
+                    if (command.SelectedAudience == definingModule.CustomName || //I only want to accept the command if it was directed to me.
                         command.SelectedAudience == Me.CubeGrid.EntityId.ToString())
                     {
-                        output = serializeOutputCommand (command, InteractionModel.CommunicationScopes.INTERNAL);
+                        output = serializeOutputCommand (command, CommunicationModel.CommunicationScopes.INTERNAL);
                         definingModule.CustomData += Names.NEW_LINE + output;
                     }
                     break;
@@ -321,27 +320,26 @@ namespace MagicBeans3
             console.ShowPublicTextOnScreen();
         } 
 
-        public void Save() //called by game on session close.
+        public void Save()
         {                       
         }
-
+         
         /// <summary>
-        /// A model defines the possible inputs of an external or internal communicator.
+        /// A CommunicationModel defines the possible inputs of an external or internal communicator.
+        /// Contained are a selection of every possible item a model could have and must be placed in the constructor when instantiating.
+        /// magicbeans need to have a common understanding in their communications.         
+        /// Not every bean is supposed to communicate with everything. If it has a model, it is allowed to communicate with it.
+        /// It is assumed that each magicbean will have instantiated exactly the same models.
+        /// The best way to interpret a command is check the received command's items match your corresponding model then figure out if that combination makes sense.
         /// </summary>
-        class InteractionModel
+        class CommunicationModel
         {
-            public enum SupportedModels
+            public enum SupportedModelIdentities
             {
-                MAGICBEAN,
+                BEANSTALK,
                 KIDNEYBEAN,
                 LIMABEAN,
-            }
-
-            public enum ScopesMatchingEnum
-            {
-                INTERNAL,
-                EXTERNAL,
-            }   
+            } 
             
             public static class CommunicationScopes
             {
@@ -350,22 +348,25 @@ namespace MagicBeans3
             }         
 
             /// <summary>
-            /// entity id is a universal audience type for a single entity.
+            /// entity id is a universal audience for a single entity.
             /// Audiences can be subjects.
-            /// Some of these audiences are internal modules which dont require radio communication.
             /// </summary>
             public static class Audiences 
             {                
-                public const string MAGICBEANS = "MAGICBEANS";
-                public const string KIDNEYBEANS = "KIDNEYBEANS";
-                public const string LIMABEANS = "LIMABEANS";
+                public const string BEANSTALK = "BEANSTALK";
+                public const string KIDNEYBEAN = "KIDNEYBEAN";
+                public const string LIMABEAN = "LIMABEAN";
             }            
 
+            /// <summary>
+            /// Job actions are the default state of a bean. When priorities are finished, they will continue with their job.
+            /// Jobs can be assigned location which leaves the context up for the drone to determine.
+            /// Beanstalk cannot be assigned a job since it is the master. It assigns it own jobs.
+            /// </summary>
             public static class JobActions
             {
                 public const string FOLLOW = "FOLLOW";
                 public const string MINE = "MINE";    
-                public const string BUILD = "BUILD";                         
             }
 
             public static class PriorityActions
@@ -373,7 +374,7 @@ namespace MagicBeans3
                 public const string NETWORK = "NETWORK";
                 public const string ATTACK = "ATTACK";
                 public const string GOTO = "GOTO";                        
-                public const string BACKUP = "BACKUP";
+                public const string HELP = "HELP";
             }
 
             /// <summary>
@@ -393,23 +394,17 @@ namespace MagicBeans3
 
                 public const string ENEMY = "ENEMY";
                 public const string NEUTRAL = "NEUTRAL";
+
+                public const string STUCK = "STUCK";
             }    
 
-            public readonly SupportedModels PersonalID;
+            public readonly SupportedModelIdentities PersonalID;
             public readonly ReadOnlyCollection <string> PersonalAudiences;
             public readonly ReadOnlyCollection <string> PersonalJobs;
             public readonly ReadOnlyCollection <string> PersonalPriorities;
             public readonly ReadOnlyCollection <string> PersonalSubjects;
             
-            /// <summary>
-            /// In this class there are selection tables for each of these string[]'s. You can define the scope of your model.
-            /// </summary>
-            /// <param name="modelsID">Can help you to distinguish models from each other. Should be unique.</param>
-            /// <param name="modelsAudiences"></param>
-            /// <param name="modelsJobs"></param> 
-            /// <param name="modelsPriorities"></param>
-            /// <param name="modelsSubjects"></param>
-            public InteractionModel (SupportedModels ModelsID, string[] modelsAudiences, string[] modelsJobs, string[] modelsPriorities, string[] modelsSubjects)
+            public CommunicationModel (SupportedModelIdentities ModelsID, string[] modelsAudiences, string[] modelsJobs, string[] modelsPriorities, string[] modelsSubjects)
             {
                 this.PersonalID = ModelsID;
                 this.PersonalAudiences = Array.AsReadOnly (modelsAudiences);
@@ -431,13 +426,7 @@ namespace MagicBeans3
             public readonly string SelectedAudience; //can be entity Id
             public readonly string Action;
             public readonly string Subject; //can be entity Id
-            public readonly Vector3D? Location;
-            
-            /// <summary>
-            /// Communication scope is not added to the serialised command "Formatted".
-            /// This is to ensure it can be easily appended to the front when you need to.
-            /// </summary>
-            public string Formatted { get; private set; }                
+            public readonly Vector3D? Location;                  
             
             public Command()
             {
