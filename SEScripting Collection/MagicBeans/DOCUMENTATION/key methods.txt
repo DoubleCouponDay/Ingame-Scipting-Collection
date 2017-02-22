@@ -1,21 +1,3 @@
-+ transceiver script
-	-test if entity id changes when merged or connected
-	-merged conveyor block or connector?
-	-test if new line is consumed or if it attaches to the command
-	-can i get enums length
-	-test that vector3d's match gps pastes when converted to string
-	-test that vector3D has no spaces inside it which could mess with my string -> vector conversion method
-	-test that main's parameter doesnt need to have a specific name
-	-test that WritePublicText (StringBuilder) works
-+ navigation script
-	-write grids name based on role
-+ kidneybean script
-	-should be alter its course when sensor detects collision. it should keep going without stopping.
-	-write grid name based on role
-	-possible to add MyDetectedEntityInfo to enemy list? or just fire on neutrals while its being hacked
-+ test feasibility of making a new ore detector block similar to beam drill
-+ limabean script
-
 KEY METHODS
 ====================
 + add the command your currently working on into this.storage
@@ -36,3 +18,5 @@ KEY METHODS
 the "positon" called Translation and three orientation vectors .Forward (-.Backward),
  .Right (-.Left) and .Up (-.Down).
 	-transpose() matrix to remove the distance between
+
++ jimmacle: take the position you want it to go relative to the ship then transform by the ships world matrix to take the coordinates from grid space to world space

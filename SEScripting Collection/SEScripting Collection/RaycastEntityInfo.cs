@@ -25,7 +25,7 @@ namespace Ingame_Scripting_Collection10
             {
                 MyDetectedEntityInfo info = testCamera.Raycast (100);
                 
-                printer[0].CustomName = info.Name + " / " + info.Relationship.ToString() + " / " + info.EntityId.ToString();
+                printer[0].CustomName = info.Name + " / " + info.Relationship.ToString() + " / " + info.Position.ToString();
             }
             timer.ApplyAction ("TriggerNow");
         }

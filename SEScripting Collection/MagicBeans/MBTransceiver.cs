@@ -16,11 +16,13 @@ namespace MagicBeans3
 #region in-game
         static class Names
         {
-            public const string SCREEN = "DIAGNOSTICS SCREEN";
-            public const string ANTENNA = "RADIO ANTENNA";              
+            public const string SCREEN = "PB1's console";
+            public const string ANTENNA = "PB1's antenna";              
             public const string MY_CONSOLE_NAME = "MBTransceiver: ";   
             public const string NEW_LINE = "\n";
-            public const char SPACE = ' ';           
+            public const char SPACE = ' ';         
+            public const char Y = 'Y';  
+            public const char Z = 'Z';
         }
 
         struct Messages
@@ -30,25 +32,28 @@ namespace MagicBeans3
 
         bool compiled;
 
-        static IMyRadioAntenna antenna;
-        static IMyTextPanel console;
-        static IMyProgrammableBlock definingModule; //assuming MBTransceiver will only ever be used with one defining module.
-        static StringBuilder concatLite; //Im assuming ill invoke Clear() on this every time I finish using this.
+        IMyRadioAntenna antenna;
+        IMyTextPanel console;
+        IMyProgrammableBlock definingModule; //assuming MBTransceiver will only ever be used with one defining module.
+        StringBuilder concatLite; //Im assuming ill invoke Clear() on this every time I finish using this.
         List <IMyProgrammableBlock> allModules;        
                 
-        List <object> nullCheckCollection = new List <object>()
-        {
-            antenna,
-            console,
-        };
+        List <object> nullCheckCollection;
        
         public void Initialise()
         {   
             bool allSystemsGo = true;
             int nullCount = default (int);              
             concatLite = new StringBuilder();
-            antenna = GridTerminalSystem.GetBlockWithName (Names.ANTENNA) as IMyRadioAntenna;       
+            antenna = GridTerminalSystem.GetBlockWithName (Names.ANTENNA) as IMyRadioAntenna;      
             console = GridTerminalSystem.GetBlockWithName (Names.SCREEN) as IMyTextPanel;
+
+            nullCheckCollection = new List <object>()
+            {
+                antenna,
+                console,
+            };
+
             allModules = new List <IMyProgrammableBlock>();
             GridTerminalSystem.GetBlocksOfType (allModules);
 
@@ -105,7 +110,6 @@ namespace MagicBeans3
                     CommunicationModel.Subjects.NEUTRAL,
                 }
             );
-
 
             CommunicationModel limaBeanModel = new CommunicationModel
             (
@@ -177,7 +181,7 @@ namespace MagicBeans3
             compiled = allSystemsGo;
         }
 
-        public void main (string serializedCommand)
+        public void Main (string serializedCommand)
         {              
             if (compiled)
             {                
@@ -214,10 +218,13 @@ namespace MagicBeans3
         void CheckForInternalCommunication()
         {
             string[] procedureList = Me.CustomData.Split (new string[] { Names.NEW_LINE }, StringSplitOptions.RemoveEmptyEntries);
+Echo ("procedurelist length: " + procedureList.Length.ToString());
 
             if (procedureList.Length >= default (int))
             {
-                Command possibleCommand = TryCreateCommand (procedureList[default (int)]);
+                Command possibleCommand;
+
+                TryCreateCommand (procedureList[default (int)], out possibleCommand);
 
                 if (possibleCommand.IsEmpty == false &&
                     possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.INTERNAL)
@@ -227,39 +234,37 @@ namespace MagicBeans3
             }
         }
 
-        /// <summary>
-        /// If conversion from string to Command was successful, returned command's property bool IsEmpty will be false.
-        /// If conversion failed, it will be true.
-        /// </summary>
-        /// <param name="serialisedCommand"></param>
-        /// <param name="possibleSuccessOutput"></param>
-        Command TryCreateCommand (string serialisedCommand)
+        void TryCreateCommand (string serialisedCommand, out Command possibleSuccessState)
         {
-            Command possibleSuccessOutput = new Command(); //Im returning a value type so it must be immutable.
+            possibleSuccessState = new Command(); //Im returning a value type so it must be immutable.
             string[] sectionedString = serialisedCommand.Split (Names.SPACE);
-
+Echo ("sectionedString length: " + sectionedString.Length.ToString());
             if (sectionedString.Length == Command.LENGTH)
             {
+                int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Y);
+                sectionedString[Command.VECTORS_INDEX].Insert (letterYPlace, Names.SPACE.ToString());
+                int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Z); //since inserting changes the position of all letters, im going to find the next index after Insert()
+                sectionedString[Command.VECTORS_INDEX].Insert (letterZPlace, Names.SPACE.ToString());
+
                 Vector3D possibleVector;
 
-                if (Vector3D.TryParse (sectionedString[Command.LENGTH - 1], out possibleVector))
+                if (Vector3D.TryParse (sectionedString[Command.VECTORS_INDEX], out possibleVector))
                 {
-                    possibleSuccessOutput = new Command (sectionedString[0],
-                                                         sectionedString[1],
-                                                         sectionedString[2],
-                                                         sectionedString[3],
-                                                         possibleVector
+                    possibleSuccessState = new Command (sectionedString[Command.SCOPES_INDEX],
+                                                        sectionedString[Command.AUDIENCES_INDEX],
+                                                        sectionedString[Command.ACTION_INDEX],
+                                                        sectionedString[Command.SUBJECT_INDEX],
+                                                        possibleVector
                                                         );
                 }
             }
-            return possibleSuccessOutput;
         }
 
         void ApplyCommand (Command command)
         {
             string output = default (string); 
 
-            switch (command.CommunicationScope)
+            switch (command.CommunicationScope) //this will send received transmissions into the internal layer and internal transmissions into the radiosphere.
             {
                 case CommunicationModel.CommunicationScopes.INTERNAL:
                     output = serializeOutputCommand (command, CommunicationModel.CommunicationScopes.EXTERNAL);
@@ -399,18 +404,18 @@ namespace MagicBeans3
             }    
 
             public readonly SupportedModelIdentities PersonalID;
-            public readonly ReadOnlyCollection <string> PersonalAudiences;
-            public readonly ReadOnlyCollection <string> PersonalJobs;
-            public readonly ReadOnlyCollection <string> PersonalPriorities;
-            public readonly ReadOnlyCollection <string> PersonalSubjects;
+            public readonly string[] PersonalAudiences;
+            public readonly string[] PersonalJobs;
+            public readonly string[] PersonalPriorities;
+            public readonly string[] PersonalSubjects;
             
             public CommunicationModel (SupportedModelIdentities ModelsID, string[] modelsAudiences, string[] modelsJobs, string[] modelsPriorities, string[] modelsSubjects)
             {
                 this.PersonalID = ModelsID;
-                this.PersonalAudiences = Array.AsReadOnly (modelsAudiences);
-                this.PersonalJobs = Array.AsReadOnly (modelsJobs);
-                this.PersonalPriorities = Array.AsReadOnly (modelsPriorities);
-                this.PersonalSubjects = Array.AsReadOnly (modelsSubjects);
+                this.PersonalAudiences = modelsAudiences;
+                this.PersonalJobs = modelsJobs;
+                this.PersonalPriorities = modelsPriorities;
+                this.PersonalSubjects = modelsSubjects;
             }                 
         }        
 
@@ -420,6 +425,11 @@ namespace MagicBeans3
             /// Will be true if you use the empty constructor overload.
             /// </summary>
             public readonly bool IsEmpty;
+            public const int SCOPES_INDEX = 0;
+            public const int AUDIENCES_INDEX = 1;
+            public const int ACTION_INDEX = 2;
+            public const int SUBJECT_INDEX = 3;
+            public const int VECTORS_INDEX = 4;
             public const int LENGTH = 5;
 
             public readonly string CommunicationScope;
