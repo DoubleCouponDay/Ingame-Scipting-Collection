@@ -224,6 +224,7 @@
     <Compile Include="KidneyBean.cs" />
     <Compile Include="LimaBean.cs" />
     <Compile Include="BeanStalk.cs" />
+    <Compile Include="MBEvasiveManeuvers.cs" />
     <Compile Include="MBFactory.cs" />
     <Compile Include="MBNavigator.cs" />
     <Compile Include="MBTransceiver.cs" />

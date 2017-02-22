@@ -7,7 +7,7 @@ using VRageMath;
 using VRage.Game;
 using System.Collections.ObjectModel;
 
-namespace SingleScript2
+namespace MagicBeans3687458456
 {
     public class Program : MyGridProgram
     {
@@ -29,5 +29,4 @@ namespace SingleScript2
         }
 #endregion in-game
     }
-}    
-
+}
