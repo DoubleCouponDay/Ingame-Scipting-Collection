@@ -13,6 +13,7 @@ namespace MagicBeans3
 {
     class Program : MyGridProgram
     {
+
 #region in-game
         static class Names
         {
