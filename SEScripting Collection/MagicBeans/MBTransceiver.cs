@@ -27,7 +27,6 @@ namespace MagicBeans3
         {
             public const string NO_BLOCK = "TRANSCEIVER ERROR: Block not found; ";
         } 
-
         bool compiled;
 
         static IMyRadioAntenna antenna;
