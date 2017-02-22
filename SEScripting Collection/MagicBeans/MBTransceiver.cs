@@ -181,7 +181,7 @@ namespace MagicBeans3
             compiled = allSystemsGo;
         }
 
-        public void Main (string serializedCommand)
+        public void Main (string serializedCommand) //Main will always default its argument to string.Empty
         {              
             if (compiled)
             {                
@@ -201,14 +201,18 @@ namespace MagicBeans3
         /// <param name="input"></param>
         void AnalyseForCommand (string input)
         {
-            string noEscapes = string.Format (@"{0}", input);
-            string singleCase = noEscapes.ToUpper(); //assuming that an interaction model is all upper.
-            Command possibleCommand = TryCreateCommand (singleCase);
-
-            if (possibleCommand.IsEmpty == false &&
-                possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.EXTERNAL)
+            if (input != null)
             {
-                ApplyCommand (possibleCommand);
+                string noEscapes = string.Format (@"{0}", input);
+                string singleCase = noEscapes.ToUpper(); //assuming that an interaction model is all upper.
+                Command possibleCommand;
+                TryCreateCommand (singleCase, out possibleCommand);
+
+                if (possibleCommand.IsEmpty == false &&
+                    possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.EXTERNAL)
+                {
+                    ApplyCommand (possibleCommand);
+                }
             }                    
         }
 
@@ -234,35 +238,46 @@ Echo ("procedurelist length: " + procedureList.Length.ToString());
             }
         }
 
+        /// <summary>
+        /// Check the IsEmpty property to see if the returned Command is genuine.
+        /// Returns Command with everything zeroed if failed.
+        /// </summary>
+        /// <param name="serialisedCommand"></param>
+        /// <param name="possibleSuccessState"></param>
         void TryCreateCommand (string serialisedCommand, out Command possibleSuccessState)
         {
-            possibleSuccessState = new Command(); //Im returning a value type so it must be immutable.
-            string[] sectionedString = serialisedCommand.Split (Names.SPACE);
-Echo ("sectionedString length: " + sectionedString.Length.ToString());
-            if (sectionedString.Length == Command.LENGTH)
+            possibleSuccessState = new Command(); //IsEmpty = true
+
+            if (serialisedCommand != null)
             {
-                int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Y);
-                sectionedString[Command.VECTORS_INDEX].Insert (letterYPlace, Names.SPACE.ToString());
-                int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Z); //since inserting changes the position of all letters, im going to find the next index after Insert()
-                sectionedString[Command.VECTORS_INDEX].Insert (letterZPlace, Names.SPACE.ToString());
+                string[] sectionedString = serialisedCommand.Split (Names.SPACE);
+    Echo ("sectionedString length: " + sectionedString.Length.ToString());
 
-                Vector3D possibleVector;
-
-                if (Vector3D.TryParse (sectionedString[Command.VECTORS_INDEX], out possibleVector))
+                if (sectionedString.Length == Command.LENGTH)
                 {
-                    possibleSuccessState = new Command (sectionedString[Command.SCOPES_INDEX],
-                                                        sectionedString[Command.AUDIENCES_INDEX],
-                                                        sectionedString[Command.ACTION_INDEX],
-                                                        sectionedString[Command.SUBJECT_INDEX],
-                                                        possibleVector
-                                                        );
+                    int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Y);
+                    sectionedString[Command.VECTORS_INDEX].Insert (letterYPlace, Names.SPACE.ToString());
+                    int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Z); //since inserting changes the position of all letters, im going to find the next index after Insert()
+                    sectionedString[Command.VECTORS_INDEX].Insert (letterZPlace, Names.SPACE.ToString());
+
+                    Vector3D possibleVector;
+
+                    if (Vector3D.TryParse (sectionedString[Command.VECTORS_INDEX], out possibleVector))
+                    {
+                        possibleSuccessState = new Command (sectionedString[Command.SCOPES_INDEX],
+                                                            sectionedString[Command.AUDIENCES_INDEX],
+                                                            sectionedString[Command.ACTION_INDEX],
+                                                            sectionedString[Command.SUBJECT_INDEX],
+                                                            possibleVector
+                                                            );
+                    }
                 }
             }
         }
 
         void ApplyCommand (Command command)
         {
-            string output = default (string); 
+            string output = string.Empty; 
 
             switch (command.CommunicationScope) //this will send received transmissions into the internal layer and internal transmissions into the radiosphere.
             {
@@ -281,7 +296,7 @@ Echo ("sectionedString length: " + sectionedString.Length.ToString());
                     break;
             }
 
-            if (output != default (string))
+            if (output != string.Empty)
             {
                 PrintToConsole (output);
             }            
@@ -290,23 +305,31 @@ Echo ("sectionedString length: " + sectionedString.Length.ToString());
         /// <summary>
         /// An output command is a received message combined with a communication scope opposite of the received one.
         /// Method will serialize all that and return it to you.
+        /// Returns empty string if failed.
         /// </summary>
         /// <param name="receivedCommand"></param>
         /// <param name="outputsScope"></param>
         /// <returns></returns>
         string serializeOutputCommand (Command receivedCommand, string outputsScope)
         {
-            concatLite.Append (outputsScope);
-            concatLite.Append (Names.SPACE);            
-            concatLite.Append (receivedCommand.SelectedAudience);
-            concatLite.Append (Names.SPACE);
-            concatLite.Append (receivedCommand.Action);
-            concatLite.Append (Names.SPACE);
-            concatLite.Append (receivedCommand.Subject);
-            concatLite.Append (Names.SPACE);
-            concatLite.Append (receivedCommand.Location.ToString());
-            string output = concatLite.ToString();
-            concatLite.Clear();
+            string output = string.Empty;
+
+            if (outputsScope != null &&
+               (outputsScope == CommunicationModel.CommunicationScopes.INTERNAL ||
+                outputsScope == CommunicationModel.CommunicationScopes.EXTERNAL))
+            {
+                concatLite.Append (outputsScope);
+                concatLite.Append (Names.SPACE);            
+                concatLite.Append (receivedCommand.SelectedAudience);
+                concatLite.Append (Names.SPACE);
+                concatLite.Append (receivedCommand.Action);
+                concatLite.Append (Names.SPACE);
+                concatLite.Append (receivedCommand.Subject);
+                concatLite.Append (Names.SPACE);
+                concatLite.Append (receivedCommand.Location.ToString());
+                output = concatLite.ToString();
+                concatLite.Clear();
+            }
             return output;
         }
 
@@ -315,14 +338,18 @@ Echo ("sectionedString length: " + sectionedString.Length.ToString());
         /// </summary>
         void PrintToConsole (string message)
         {
-            string previousPrint = console.GetPublicText();
-            concatLite.Append (Names.MY_CONSOLE_NAME);
-            concatLite.Append (message);
-            concatLite.Append (Names.NEW_LINE);
-            concatLite.Append (previousPrint);
-            console.WritePublicText (concatLite);
-            concatLite.Clear();
-            console.ShowPublicTextOnScreen();
+            string previousPrint = console.GetPublicText(); //assuming GetPublicText() will always return string.Empty
+
+            if (message != null)
+            {
+                concatLite.Append (Names.MY_CONSOLE_NAME);
+                concatLite.Append (message);
+                concatLite.Append (Names.NEW_LINE);
+                concatLite.Append (previousPrint);
+                console.WritePublicText (concatLite);
+                concatLite.Clear();
+                console.ShowPublicTextOnScreen();
+            }
         } 
 
         public void Save()
@@ -421,10 +448,8 @@ Echo ("sectionedString length: " + sectionedString.Length.ToString());
 
         public class Command
         {
-            /// <summary>
-            /// Will be true if you use the empty constructor overload.
-            /// </summary>
             public readonly bool IsEmpty;
+
             public const int SCOPES_INDEX = 0;
             public const int AUDIENCES_INDEX = 1;
             public const int ACTION_INDEX = 2;
@@ -436,20 +461,21 @@ Echo ("sectionedString length: " + sectionedString.Length.ToString());
             public readonly string SelectedAudience; //can be entity Id
             public readonly string Action;
             public readonly string Subject; //can be entity Id
-            public readonly Vector3D? Location;                  
+            public readonly Vector3D? Location;        
             
             public Command()
             {
                 IsEmpty = true;
-            }
-
+            }                  
+            
             public Command (string communicationScope, string selectedAudience, string action, string subject, Vector3D location)
-            {               
+            {   
+                IsEmpty = false;            
                 this.CommunicationScope = communicationScope;     
                 this.SelectedAudience = selectedAudience;
                 this.Action = action;
                 this.Subject = subject;
-                this.Location = location;
+                this.Location = location;                
             } 
         }   
 #endregion in-game

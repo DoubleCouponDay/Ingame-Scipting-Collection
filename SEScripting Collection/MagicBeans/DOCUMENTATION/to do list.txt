@@ -9,6 +9,14 @@
 	-test that vector3D has no spaces inside it which could mess with my string -> vector conversion method
 	-test that main's parameter doesnt need to have a specific name
 	-test that WritePublicText (StringBuilder) works
+
++ evasive maneuvers script
+	-check for string mishandling default state
+	-calibrate it to run in the magic beans model
+	-needs to be refactored using block orientation to sort thruster groups. old method uses automatically generated name which is unreliable.	
+	-script should reinitialize on construction
+	-test and get it working when no one is in a seat.
+	-overwrite the original turret evasion script with this
 	
 + navigation script
 	-write grids name based on role
@@ -20,12 +28,6 @@
 
 + test feasibility of making a new ore detector block similar to beam drill
 
-+ evasive maneuvers script
-	-calibrate it to run in the magic beans model
-	-needs to be refactored using block orientation to sort thruster groups. old method uses automatically generated name which is unreliable.	
-	-script should reinitialize on construction
-	-test and get it working when no one is in a seat.
-	-overwrite the original turret evasion script with this
- 
+
 + limabean script
 
