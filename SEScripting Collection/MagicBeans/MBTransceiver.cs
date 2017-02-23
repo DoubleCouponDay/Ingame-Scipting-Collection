@@ -19,6 +19,7 @@ namespace MagicBeans3
             public const string ANTENNA = "ANTENNA";
             public const string MY_CONSOLE_NAME = "MBTransceiver: ";
             public const string NEW_LINE = "\n";
+            public const char COMMAND_SEPARATOR = '_';
             public const char SPACE = ' ';
             public const char Y = 'Y';
             public const char Z = 'Z';
@@ -226,13 +227,22 @@ namespace MagicBeans3
         void CheckForInternalCommunication()
         {
             Echo("CheckForInternalCommunication start");
-            string[] procedureList = Me.CustomData.Split(new string[] { Names.NEW_LINE }, StringSplitOptions.RemoveEmptyEntries);
+            string[] procedureList = Me.CustomData.Split (Names.COMMAND_SEPARATOR);
 
-            if (procedureList.Length >= default(int))
+if (procedureList[0] == null)
+{
+    Echo ("this shit is definitely null");
+}
+
+            if (procedureList != null &&
+                procedureList.Length >= default (int))
             {
                 Command possibleCommand;
-
-                TryCreateCommand(procedureList[default(int)], out possibleCommand);
+if (procedureList[default (int)].Length == 1)
+{
+    Echo ("the current internal command is: " + procedureList[default (int)]);
+}
+                TryCreateCommand (procedureList[default(int)], out possibleCommand);
 
                 if (possibleCommand.IsEmpty == false &&
                     possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.INTERNAL)
