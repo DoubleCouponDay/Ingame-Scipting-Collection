@@ -41,7 +41,7 @@ namespace MagicBeans3
 
         public void Initialise()
         {
-            Echo("Initialise start");
+            //Echo("Initialise start");
             bool allSystemsGo = true;
             int nullCount = default(int);
             concatLite = new StringBuilder();
@@ -179,12 +179,12 @@ namespace MagicBeans3
                 }
             }
             compiled = allSystemsGo;
-            Echo("Initialise end");
+            //Echo("Initialise end");
         }
 
         public void Main(string serializedCommand) //Main will always default its argument to string.Empty
         {
-            Echo("Main start");
+            //Echo("Main start");
             if (compiled)
             {
                 AnalyseForCommand(serializedCommand);
@@ -195,7 +195,7 @@ namespace MagicBeans3
             {
                 Initialise();
             }
-            Echo("Main end");
+            //Echo("Main end");
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace MagicBeans3
         /// <param name="input"></param>
         void AnalyseForCommand(string input)
         {
-            Echo("AnalyseForCommand start");
+            //Echo("AnalyseForCommand start");
             if (input != null)
             {
                 string noEscapes = string.Format(@"{0}", input);
@@ -218,7 +218,7 @@ namespace MagicBeans3
                     ApplyCommand(possibleCommand);
                 }
             }
-            Echo("AnalyseForCommand end");
+            //Echo("AnalyseForCommand end");
         }
 
         /// <summary>
@@ -226,22 +226,14 @@ namespace MagicBeans3
         /// </summary>
         void CheckForInternalCommunication()
         {
-            Echo("CheckForInternalCommunication start");
+            //Echo("CheckForInternalCommunication start");
             string[] procedureList = Me.CustomData.Split (Names.COMMAND_SEPARATOR);
-
-if (procedureList[0] == null)
-{
-    Echo ("this shit is definitely null");
-}
 
             if (procedureList != null &&
                 procedureList.Length >= default (int))
             {
                 Command possibleCommand;
-if (procedureList[default (int)].Length == 1)
-{
-    Echo ("the current internal command is: " + procedureList[default (int)]);
-}
+
                 TryCreateCommand (procedureList[default(int)], out possibleCommand);
 
                 if (possibleCommand.IsEmpty == false &&
@@ -250,7 +242,7 @@ if (procedureList[default (int)].Length == 1)
                     ApplyCommand(possibleCommand);
                 }
             }
-            Echo("CheckForInternalCommunication end");
+            //Echo("CheckForInternalCommunication end");
         }
 
         /// <summary>
@@ -261,7 +253,7 @@ if (procedureList[default (int)].Length == 1)
         /// <param name="possibleSuccessState"></param>
         void TryCreateCommand(string serialisedCommand, out Command possibleSuccessState)
         {
-            Echo("TryCreateCommand start");
+            //Echo("TryCreateCommand start");
             possibleSuccessState = new Command(); //IsEmpty = true
 
             if (serialisedCommand != null)
@@ -288,12 +280,12 @@ if (procedureList[default (int)].Length == 1)
                     }
                 }
             }
-            Echo("TryCreateCommand end");
+            //Echo("TryCreateCommand end");
         }
 
         void ApplyCommand(Command command)
         {
-            Echo("ApplyCommand start");
+            //Echo("ApplyCommand start");
             string output = string.Empty;
 
             switch (command.CommunicationScope) //this will send received transmissions into the internal layer and internal transmissions into the radiosphere.
@@ -317,7 +309,7 @@ if (procedureList[default (int)].Length == 1)
             {
                 PrintToConsole(output);
             }
-            Echo("ApplyCommand end");
+            //Echo("ApplyCommand end");
         }
 
         /// <summary>
@@ -330,6 +322,7 @@ if (procedureList[default (int)].Length == 1)
         /// <returns></returns>
         string serializeOutputCommand(Command receivedCommand, string outputsScope)
         {
+            //Echo ("serializeOutputCommand Start");
             string output = string.Empty;
 
             if (outputsScope != null &&
@@ -348,6 +341,7 @@ if (procedureList[default (int)].Length == 1)
                 output = concatLite.ToString();
                 concatLite.Clear();
             }
+            //Echo ("serializeOutputCommand end");
             return output;
         }
 
@@ -356,7 +350,7 @@ if (procedureList[default (int)].Length == 1)
         /// </summary>
         void PrintToConsole(string message)
         {
-            Echo("PrintToConsole start");
+            //Echo("PrintToConsole start");
             string previousPrint = console.GetPublicText(); //assuming GetPublicText() will always return string.Empty
 
             if (message != null)
@@ -369,7 +363,7 @@ if (procedureList[default (int)].Length == 1)
                 concatLite.Clear();
                 console.ShowPublicTextOnScreen();
             }
-            Echo("PrintToConsole end");
+            //Echo("PrintToConsole end");
         }
 
         public void Save()
