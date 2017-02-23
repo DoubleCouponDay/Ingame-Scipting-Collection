@@ -1,19 +1,8 @@
-+ transceiver script
-	-remove spaces from vectors from a received message / minify before transmitting
-	-get it working and fully tested
-	-test if entity id changes when merged or connected
-	-merged conveyor block or connector?
-	-test if new line is consumed or if it attaches to the command
-	-can i get enums length
-	-test that vector3d's match gps pastes when converted to string
-	-test that vector3D has no spaces inside it which could mess with my string -> vector conversion method
-	-test that main's parameter doesnt need to have a specific name
-	-test that WritePublicText (StringBuilder) works
 
 + evasive maneuvers script
-	-check for string mishandling default state
-	-calibrate it to run in the magic beans model
-	-needs to be refactored using block orientation to sort thruster groups. old method uses automatically generated name which is unreliable.	
+	-
+	-
+	-
 	-script should reinitialize on construction
 	-test and get it working when no one is in a seat.
 	-overwrite the original turret evasion script with this
@@ -27,7 +16,6 @@
 	-possible to add MyDetectedEntityInfo to enemy list? or just fire on neutrals while its being hacked
 
 + test feasibility of making a new ore detector block similar to beam drill
-
 
 + limabean script
 
