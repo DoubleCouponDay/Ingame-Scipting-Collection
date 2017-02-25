@@ -1,13 +1,13 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using Sandbox.ModAPI.Ingame;
 using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 using VRage.Game;
-using System.Collections.ObjectModel;
 
-namespace SingleScript2
+namespace MagicBeans6665
 {
     public class Program : MyGridProgram
     {
@@ -29,5 +29,4 @@ namespace SingleScript2
         }
 #endregion in-game
     }
-}    
-
+}

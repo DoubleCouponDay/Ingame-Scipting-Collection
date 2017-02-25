@@ -202,9 +202,10 @@
     <Compile Include="Debugger.cs" />
     <Compile Include="KidneyBean.cs" />
     <Compile Include="LimaBean.cs" />
-    <Compile Include="MagicBean.cs" />
     <Compile Include="BeanStalk.cs" />
-    <Compile Include="MBNavigation.cs" />
+    <Compile Include="MBEvasiveManeuvers.cs" />
+    <Compile Include="MBFactory.cs" />
+    <Compile Include="MBNavigator.cs" />
     <Compile Include="MBTransceiver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
