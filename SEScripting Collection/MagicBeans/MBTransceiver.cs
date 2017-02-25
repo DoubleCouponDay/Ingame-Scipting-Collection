@@ -286,6 +286,7 @@ namespace MagicBeans3
         void ApplyCommand(Command command)
         {
             //Echo("ApplyCommand start");
+            bool isExternal = default(bool);
             string output = string.Empty;
 
             switch (command.CommunicationScope) //this will send received transmissions into the internal layer and internal transmissions into the radiosphere.
@@ -301,11 +302,13 @@ namespace MagicBeans3
                     {
                         output = serializeOutputCommand(command, CommunicationModel.CommunicationScopes.INTERNAL);
                         definingModule.CustomData += Names.NEW_LINE + output;
+                        bool isExternal = true;
+
                     }
                     break;
             }
 
-            if (output != string.Empty)
+            if (output != string.Empty && isExternal == true)
             {
                 PrintToConsole(output);
             }
@@ -360,6 +363,7 @@ namespace MagicBeans3
                 concatLite.Append(Names.NEW_LINE);
                 concatLite.Append(previousPrint);
                 console.WritePublicText(concatLite);
+                Echo(concatLite);
                 concatLite.Clear();
                 console.ShowPublicTextOnScreen();
             }
