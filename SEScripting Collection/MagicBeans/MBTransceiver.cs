@@ -255,25 +255,11 @@ namespace MagicBeans3
         void TryCreateCommand(string serialisedCommand, out Command possibleSuccessState)
         {
             //Echo("TryCreateCommand start");
-            possibleSuccessState = new Command(); //IsEmpty = true
+            possibleSuccessState = new Command();
 
             if (serialisedCommand != null)
             {
                 string[] sectionedString = serialisedCommand.Split(Names.SPACE);
-
-                if (sectionedString.Length == Command.LENGTH)
-                {
-                    int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf(Names.Y);
-                    sectionedString[Command.VECTORS_INDEX].Insert(letterYPlace, Names.SPACE.ToString());
-                    int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf(Names.Z); //since inserting changes the position of all letters, im going to find the next index after Insert()
-                    sectionedString[Command.VECTORS_INDEX].Insert(letterZPlace, Names.SPACE.ToString());
-
-                    Vector3D possibleVector;
-
-                    if (Vector3D.TryParse(sectionedString[Command.VECTORS_INDEX], out possibleVector))
-                    {
-                        possibleSuccessState = new Command(sectionedString[Command.SCOPES_INDEX],
-                string[] sectionedString = serialisedCommand.Split (Names.SPACE);
 
                 if (sectionedString.Length == Command.LENGTH)
                 {
@@ -317,13 +303,13 @@ namespace MagicBeans3
                     {
                         output = serializeOutputCommand (command, CommunicationModel.CommunicationScopes.INTERNAL);
                         definingModule.CustomData += Names.NEW_LINE + output;
-                        bool isExternal = true;
+                        isExternal = true;
 
                     }
                     break;
             }
 
-            if (output != string.Empty && isExternal == true)
+            if (output != string.Empty && isExternal)
             {
                 PrintToConsole(output);
             }
