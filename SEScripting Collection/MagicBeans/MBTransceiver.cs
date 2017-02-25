@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Sandbox.ModAPI.Ingame;
 using SpaceEngineers.Game.ModAPI.Ingame;
@@ -13,37 +12,40 @@ namespace MagicBeans3
 {
     class Program : MyGridProgram
     {
-#region in-game
+        #region in-game
         static class Names
         {
-            public const string SCREEN = "PB1's console";
-            public const string ANTENNA = "PB1's antenna";              
-            public const string MY_CONSOLE_NAME = "MBTransceiver: ";   
+            public const string SCREEN = "PRINT CONSOLE";
+            public const string ANTENNA = "ANTENNA";
+            public const string MY_CONSOLE_NAME = "MBTransceiver: ";
             public const string NEW_LINE = "\n";
-            public const char SPACE = ' ';         
-            public const char Y = 'Y';  
+            public const char COMMAND_SEPARATOR = '_';
+            public const char SPACE = ' ';
+            public const char Y = 'Y';
             public const char Z = 'Z';
         }
 
         struct Messages
         {
             public const string NO_BLOCK = "TRANSCEIVER ERROR: Block not found; ";
-        } 
+        }
         bool compiled;
 
         IMyRadioAntenna antenna;
         IMyTextPanel console;
         IMyProgrammableBlock definingModule; //assuming MBTransceiver will only ever be used with one defining module.
         StringBuilder concatLite; //Im assuming ill invoke Clear() on this every time I finish using this.
-        List <IMyProgrammableBlock> allModules;        
-                
-        List <object> nullCheckCollection;
-       
+        
+        List<IMyProgrammableBlock> allModules;
+        List<object> nullCheckCollection;
+        
         public void Initialise()
-        {   
+        {
+            //Echo("Initialise start");
             bool allSystemsGo = true;
-            int nullCount = default (int);              
+            int nullCount = default(int);
             concatLite = new StringBuilder();
+
             antenna = GridTerminalSystem.GetBlockWithName (Names.ANTENNA) as IMyRadioAntenna;      
             console = GridTerminalSystem.GetBlockWithName (Names.SCREEN) as IMyTextPanel;
 
@@ -60,7 +62,7 @@ namespace MagicBeans3
             (
                 CommunicationModel.SupportedModelIdentities.BEANSTALK,
 
-                new string[] 
+                new string[]
                 {
                     CommunicationModel.Audiences.BEANSTALK,
                     CommunicationModel.Audiences.LIMABEAN,
@@ -113,7 +115,7 @@ namespace MagicBeans3
             CommunicationModel limaBeanModel = new CommunicationModel
             (
                 CommunicationModel.SupportedModelIdentities.LIMABEAN,
-                
+
                 new string[]
                 {
                     CommunicationModel.Audiences.BEANSTALK,
@@ -151,7 +153,7 @@ namespace MagicBeans3
                     allModules[i].CustomName == CommunicationModel.Audiences.BEANSTALK)
                 {
                     definingModule = allModules[i];
-                    nullCheckCollection.Add (definingModule);
+                    nullCheckCollection.Add(definingModule);
                     allModules.Clear();
                     break; //each user of this script is only expected to have one of the defining modules.
                 }
@@ -159,11 +161,11 @@ namespace MagicBeans3
                 else if (i == allModules.Count - 1) //assuming success state will break away before this happens.
                 {
                     allSystemsGo = false;
-                    Echo (Messages.NO_BLOCK);
+                    Echo(Messages.NO_BLOCK);
                 }
             }
-            
-            for (int i = 0; i < nullCheckCollection.Count; i++) 
+
+            for (int i = 0; i < nullCheckCollection.Count; i++)
             {
                 if (nullCheckCollection[i] == null)
                 {
@@ -171,70 +173,77 @@ namespace MagicBeans3
                 }
 
                 else if (i == nullCheckCollection.Count - 1 &&
-                         nullCount != default (int))
+                         nullCount != default(int))
                 {
                     allSystemsGo = false;
-                    Echo (Messages.NO_BLOCK + nullCount.ToString());
-                }                
-            } 
+                    Echo(Messages.NO_BLOCK + nullCount.ToString());
+                }
+            }
             compiled = allSystemsGo;
+            //Echo("Initialise end");
         }
 
-        public void Main (string serializedCommand) //Main will always default its argument to string.Empty
-        {              
+        public void Main(string serializedCommand) //Main will always default its argument to string.Empty
+        {
+            //Echo("Main start");
+            
             if (compiled)
-            {                
-                AnalyseForCommand (serializedCommand);  
-                CheckForInternalCommunication();                  
+            {
+                AnalyseForCommand(serializedCommand);
+                CheckForInternalCommunication();
             }
 
             else
             {
                 Initialise();
             }
+            //Echo("Main end");
         }
 
         /// <summary>
         /// Analyses string input if there was a transmission received.
         /// </summary>
         /// <param name="input"></param>
-        void AnalyseForCommand (string input)
+        void AnalyseForCommand(string input)
         {
+            //Echo("AnalyseForCommand start");
             if (input != null)
             {
-                string noEscapes = string.Format (@"{0}", input);
+                string noEscapes = string.Format(@"{0}", input);
                 string singleCase = noEscapes.ToUpper(); //assuming that an interaction model is all upper.
                 Command possibleCommand;
-                TryCreateCommand (singleCase, out possibleCommand);
+                TryCreateCommand(singleCase, out possibleCommand);
 
                 if (possibleCommand.IsEmpty == false &&
                     possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.EXTERNAL)
                 {
-                    ApplyCommand (possibleCommand);
+                    ApplyCommand(possibleCommand);
                 }
-            }                    
+            }
+            //Echo("AnalyseForCommand end");
         }
 
         /// <summary>
-        ///Checks customdata storage for an internal communication.
+        ///Checks custom data storage for an internal communication.
         /// </summary>
         void CheckForInternalCommunication()
         {
-            string[] procedureList = Me.CustomData.Split (new string[] { Names.NEW_LINE }, StringSplitOptions.RemoveEmptyEntries);
-Echo ("procedurelist length: " + procedureList.Length.ToString());
+            //Echo("CheckForInternalCommunication start");
+            string[] procedureList = Me.CustomData.Split (Names.COMMAND_SEPARATOR);
 
-            if (procedureList.Length >= default (int))
+            if (procedureList != null &&
+                procedureList.Length >= default (int))
             {
                 Command possibleCommand;
-
                 TryCreateCommand (procedureList[default (int)], out possibleCommand);
 
                 if (possibleCommand.IsEmpty == false &&
                     possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.INTERNAL)
                 {
-                    ApplyCommand (possibleCommand);
-                }       
+                    ApplyCommand(possibleCommand);
+                }
             }
+            //Echo("CheckForInternalCommunication end");
         }
 
         /// <summary>
@@ -243,14 +252,28 @@ Echo ("procedurelist length: " + procedureList.Length.ToString());
         /// </summary>
         /// <param name="serialisedCommand"></param>
         /// <param name="possibleSuccessState"></param>
-        void TryCreateCommand (string serialisedCommand, out Command possibleSuccessState)
+        void TryCreateCommand(string serialisedCommand, out Command possibleSuccessState)
         {
+            //Echo("TryCreateCommand start");
             possibleSuccessState = new Command(); //IsEmpty = true
 
             if (serialisedCommand != null)
             {
+                string[] sectionedString = serialisedCommand.Split(Names.SPACE);
+
+                if (sectionedString.Length == Command.LENGTH)
+                {
+                    int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf(Names.Y);
+                    sectionedString[Command.VECTORS_INDEX].Insert(letterYPlace, Names.SPACE.ToString());
+                    int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf(Names.Z); //since inserting changes the position of all letters, im going to find the next index after Insert()
+                    sectionedString[Command.VECTORS_INDEX].Insert(letterZPlace, Names.SPACE.ToString());
+
+                    Vector3D possibleVector;
+
+                    if (Vector3D.TryParse(sectionedString[Command.VECTORS_INDEX], out possibleVector))
+                    {
+                        possibleSuccessState = new Command(sectionedString[Command.SCOPES_INDEX],
                 string[] sectionedString = serialisedCommand.Split (Names.SPACE);
-    Echo ("sectionedString length: " + sectionedString.Length.ToString());
 
                 if (sectionedString.Length == Command.LENGTH)
                 {
@@ -272,11 +295,14 @@ Echo ("procedurelist length: " + procedureList.Length.ToString());
                     }
                 }
             }
+            //Echo("TryCreateCommand end");
         }
 
-        void ApplyCommand (Command command)
+        void ApplyCommand(Command command)
         {
-            string output = string.Empty; 
+            //Echo("ApplyCommand start");
+            bool isExternal = default(bool);
+            string output = string.Empty;
 
             switch (command.CommunicationScope) //this will send received transmissions into the internal layer and internal transmissions into the radiosphere.
             {
@@ -291,14 +317,17 @@ Echo ("procedurelist length: " + procedureList.Length.ToString());
                     {
                         output = serializeOutputCommand (command, CommunicationModel.CommunicationScopes.INTERNAL);
                         definingModule.CustomData += Names.NEW_LINE + output;
+                        bool isExternal = true;
+
                     }
                     break;
             }
 
-            if (output != string.Empty)
+            if (output != string.Empty && isExternal == true)
             {
-                PrintToConsole (output);
-            }            
+                PrintToConsole(output);
+            }
+            //Echo("ApplyCommand end");
         }
 
         /// <summary>
@@ -309,51 +338,56 @@ Echo ("procedurelist length: " + procedureList.Length.ToString());
         /// <param name="receivedCommand"></param>
         /// <param name="outputsScope"></param>
         /// <returns></returns>
-        string serializeOutputCommand (Command receivedCommand, string outputsScope)
+        string serializeOutputCommand(Command receivedCommand, string outputsScope)
         {
+            //Echo ("serializeOutputCommand Start");
             string output = string.Empty;
 
             if (outputsScope != null &&
                (outputsScope == CommunicationModel.CommunicationScopes.INTERNAL ||
                 outputsScope == CommunicationModel.CommunicationScopes.EXTERNAL))
             {
-                concatLite.Append (outputsScope);
-                concatLite.Append (Names.SPACE);            
-                concatLite.Append (receivedCommand.SelectedAudience);
-                concatLite.Append (Names.SPACE);
-                concatLite.Append (receivedCommand.Action);
-                concatLite.Append (Names.SPACE);
-                concatLite.Append (receivedCommand.Subject);
-                concatLite.Append (Names.SPACE);
-                concatLite.Append (receivedCommand.Location.ToString());
+                concatLite.Append(outputsScope);
+                concatLite.Append(Names.SPACE);
+                concatLite.Append(receivedCommand.SelectedAudience);
+                concatLite.Append(Names.SPACE);
+                concatLite.Append(receivedCommand.Action);
+                concatLite.Append(Names.SPACE);
+                concatLite.Append(receivedCommand.Subject);
+                concatLite.Append(Names.SPACE);
+                concatLite.Append(receivedCommand.Location.ToString());
                 output = concatLite.ToString();
                 concatLite.Clear();
             }
+            //Echo ("serializeOutputCommand end");
             return output;
         }
 
         /// <summary>
         /// reads the paragraph in IMyTextPanel console and prints a new paragraph with message at the top.
         /// </summary>
-        void PrintToConsole (string message)
+        void PrintToConsole(string message)
         {
+            //Echo("PrintToConsole start");
             string previousPrint = console.GetPublicText(); //assuming GetPublicText() will always return string.Empty
 
             if (message != null)
             {
-                concatLite.Append (Names.MY_CONSOLE_NAME);
-                concatLite.Append (message);
-                concatLite.Append (Names.NEW_LINE);
-                concatLite.Append (previousPrint);
-                console.WritePublicText (concatLite);
+                concatLite.Append(Names.MY_CONSOLE_NAME);
+                concatLite.Append(message);
+                concatLite.Append(Names.NEW_LINE);
+                concatLite.Append(previousPrint);
+                console.WritePublicText(concatLite);
+                Echo(concatLite);
                 concatLite.Clear();
                 console.ShowPublicTextOnScreen();
             }
-        } 
+            //Echo("PrintToConsole end");
+        }
 
         public void Save()
-        {                       
-        }
+        {
+        } 
          
         /// <summary>
         /// A CommunicationModel defines the possible inputs of an external or internal communicator.
@@ -376,18 +410,18 @@ Echo ("procedurelist length: " + procedureList.Length.ToString());
             {
                 public const string INTERNAL = "INTERNAL";
                 public const string EXTERNAL = "EXTERNAL";
-            }         
+            }
 
             /// <summary>
             /// entity id is a universal audience for a single entity.
             /// Audiences can be subjects.
             /// </summary>
-            public static class Audiences 
-            {                
+            public static class Audiences
+            {
                 public const string BEANSTALK = "BEANSTALK";
                 public const string KIDNEYBEAN = "KIDNEYBEAN";
                 public const string LIMABEAN = "LIMABEAN";
-            }            
+            }
 
             /// <summary>
             /// Job actions are the default state of a bean. When priorities are finished, they will continue with their job.
@@ -397,14 +431,14 @@ Echo ("procedurelist length: " + procedureList.Length.ToString());
             public static class JobActions
             {
                 public const string FOLLOW = "FOLLOW";
-                public const string MINE = "MINE";    
+                public const string MINE = "MINE";
             }
 
             public static class PriorityActions
             {
                 public const string NETWORK = "NETWORK";
                 public const string ATTACK = "ATTACK";
-                public const string GOTO = "GOTO";                        
+                public const string GOTO = "GOTO";
                 public const string HELP = "HELP";
             }
 
@@ -416,12 +450,12 @@ Echo ("procedurelist length: " + procedureList.Length.ToString());
                 public const string PLATINUM = "PLATINUM";
                 public const string GOLD = "GOLD";
                 public const string SILVER = "SILVER";
-                public const string SILICON = "SILICON";    
+                public const string SILICON = "SILICON";
                 public const string NICKEL = "NICKEL";
                 public const string URANIUM = "URANIUM";
                 public const string MAGNESIUM = "MAGNESIUM";
                 public const string IRON = "IRON";
-                public const string ICE = "ICE";                
+                public const string ICE = "ICE";
 
                 public const string ENEMY = "ENEMY";
                 public const string NEUTRAL = "NEUTRAL";
@@ -460,7 +494,8 @@ Echo ("procedurelist length: " + procedureList.Length.ToString());
             public readonly string SelectedAudience; //can be entity Id
             public readonly string Action;
             public readonly string Subject; //can be entity Id
-            public readonly Vector3D? Location;        
+            
+            public readonly Vector3D? Location;    
             
             public Command()
             {
