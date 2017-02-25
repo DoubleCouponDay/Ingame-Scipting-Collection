@@ -255,7 +255,7 @@ namespace MagicBeans3
         void TryCreateCommand(string serialisedCommand, out Command possibleSuccessState)
         {
             //Echo("TryCreateCommand start");
-            possibleSuccessState = new Command(); //IsEmpty = true
+            possibleSuccessState = new Command();
 
             if (serialisedCommand != null)
             {
@@ -309,7 +309,7 @@ namespace MagicBeans3
                     break;
             }
 
-            if (output != string.Empty && isExternal == true)
+            if (output != string.Empty && isExternal)
             {
                 PrintToConsole(output);
             }
