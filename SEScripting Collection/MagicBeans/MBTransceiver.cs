@@ -21,8 +21,9 @@ namespace MagicBeans3
             public const string NEW_LINE = "\n";
             public const char COMMAND_SEPARATOR = '_';
             public const char SPACE = ' ';
-            public const char Y = 'Y';
-            public const char Z = 'Z';
+            public const int NO_SPACE = -1;
+            public const string Y_CONVENTION = "Y:";
+            public const string Z_CONVENTION = "Z:";
         }
 
         struct Messages
@@ -211,8 +212,7 @@ namespace MagicBeans3
             {
                 string noEscapes = string.Format(@"{0}", input);
                 string singleCase = noEscapes.ToUpper(); //assuming that an interaction model is all upper.
-                Command possibleCommand;
-                TryCreateCommand(singleCase, out possibleCommand);
+                Command possibleCommand = TryCreateCommand(singleCase);
 
                 if (possibleCommand.IsEmpty == false &&
                     possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.EXTERNAL)
@@ -234,8 +234,9 @@ namespace MagicBeans3
             if (procedureList != null &&
                 procedureList.Length >= default (int))
             {
-                Command possibleCommand;
-                TryCreateCommand (procedureList[default (int)], out possibleCommand);
+                
+                Command possibleCommand = TryCreateCommand(procedureList[default(int)]);
+                
 
                 if (possibleCommand.IsEmpty == false &&
                     possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.INTERNAL)
@@ -252,10 +253,10 @@ namespace MagicBeans3
         /// </summary>
         /// <param name="serialisedCommand"></param>
         /// <param name="possibleSuccessState"></param>
-        void TryCreateCommand(string serialisedCommand, out Command possibleSuccessState)
+        Command TryCreateCommand(string serialisedCommand)
         {
             //Echo("TryCreateCommand start");
-            possibleSuccessState = new Command(); //IsEmpty = true
+            Command possibleSuccessState = new Command();
 
             if (serialisedCommand != null)
             {
@@ -263,7 +264,7 @@ namespace MagicBeans3
 
                 if (sectionedString.Length == Command.LENGTH)
                 {
-                    int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Y);
+                    int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf ("");
                     sectionedString[Command.VECTORS_INDEX].Insert (letterYPlace, Names.SPACE.ToString());
                     int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Z); //since inserting changes the position of all letters, im going to find the next index after Insert()
                     sectionedString[Command.VECTORS_INDEX].Insert (letterZPlace, Names.SPACE.ToString());
@@ -282,6 +283,7 @@ namespace MagicBeans3
                 }
             }
             //Echo("TryCreateCommand end");
+            return possibleSuccessState;
         }
 
         void ApplyCommand(Command command)
@@ -341,7 +343,12 @@ namespace MagicBeans3
                 concatLite.Append(Names.SPACE);
                 concatLite.Append(receivedCommand.Subject);
                 concatLite.Append(Names.SPACE);
-                concatLite.Append(receivedCommand.Location.ToString());
+
+                string locationVector = receivedCommand.Location.ToString();
+                while (locationVector.IndexOf(Names.SPACE) != Names.NO_SPACE) {
+                    locationVector.Remove(Names.SPACE);
+                }
+                concatLite.Append(locationVector);
                 output = concatLite.ToString();
                 concatLite.Clear();
             }
@@ -364,7 +371,6 @@ namespace MagicBeans3
                 concatLite.Append(Names.NEW_LINE);
                 concatLite.Append(previousPrint);
                 console.WritePublicText(concatLite);
-                Echo(concatLite);
                 concatLite.Clear();
                 console.ShowPublicTextOnScreen();
             }
