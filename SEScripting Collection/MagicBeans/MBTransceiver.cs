@@ -311,7 +311,7 @@ namespace MagicBeans3
                     break;
             }
 
-            if (output != string.Empty && isExternal == true)
+            if (output != string.Empty && isExternal)
             {
                 PrintToConsole(output);
             }
