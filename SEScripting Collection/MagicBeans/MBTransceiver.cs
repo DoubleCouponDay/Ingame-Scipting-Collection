@@ -263,7 +263,7 @@ namespace MagicBeans3
 
                 if (sectionedString.Length == Command.LENGTH)
                 {
-                    int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Y_CONVENTION);
+                    int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Y_CONVENTION);
                     sectionedString[Command.VECTORS_INDEX].Insert (letterYPlace, Names.SPACE.ToString());
                     int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Z_CONVENTION); //since inserting changes the position of all letters, im going to find the next index after Insert()
                     sectionedString[Command.VECTORS_INDEX].Insert (letterZPlace, Names.SPACE.ToString());
