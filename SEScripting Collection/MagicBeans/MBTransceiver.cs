@@ -266,7 +266,7 @@ namespace MagicBeans3
                 {
                     int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf ("");
                     sectionedString[Command.VECTORS_INDEX].Insert (letterYPlace, Names.SPACE.ToString());
-                    int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Z); //since inserting changes the position of all letters, im going to find the next index after Insert()
+                    int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Z_CONVENTION); //since inserting changes the position of all letters, im going to find the next index after Insert()
                     sectionedString[Command.VECTORS_INDEX].Insert (letterZPlace, Names.SPACE.ToString());
 
                     Vector3D possibleVector;
