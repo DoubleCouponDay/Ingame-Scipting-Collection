@@ -364,7 +364,6 @@ namespace MagicBeans3
                 concatLite.Append(Names.NEW_LINE);
                 concatLite.Append(previousPrint);
                 console.WritePublicText(concatLite);
-                Echo(concatLite);
                 concatLite.Clear();
                 console.ShowPublicTextOnScreen();
             }
