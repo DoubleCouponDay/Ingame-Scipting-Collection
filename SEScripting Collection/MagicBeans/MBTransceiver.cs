@@ -82,7 +82,6 @@ namespace MagicBeans3
                 {
                     CommunicationModel.Audiences.BEANSTALK,
                     CommunicationModel.Subjects.ENEMY,
-                    CommunicationModel.Subjects.STUCK,
                 }
             );
 
@@ -264,7 +263,7 @@ namespace MagicBeans3
 
                 if (sectionedString.Length == Command.LENGTH)
                 {
-                    int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf ("");
+                    int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Y_CONVENTION);
                     sectionedString[Command.VECTORS_INDEX].Insert (letterYPlace, Names.SPACE.ToString());
                     int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Z_CONVENTION); //since inserting changes the position of all letters, im going to find the next index after Insert()
                     sectionedString[Command.VECTORS_INDEX].Insert (letterZPlace, Names.SPACE.ToString());
@@ -273,6 +272,7 @@ namespace MagicBeans3
 
                     if (Vector3D.TryParse (sectionedString[Command.VECTORS_INDEX], out possibleVector))
                     {
+                        Echo ("Vector3D worked");
                         possibleSuccessState = new Command (sectionedString[Command.SCOPES_INDEX],
                                                             sectionedString[Command.AUDIENCES_INDEX],
                                                             sectionedString[Command.ACTION_INDEX],
@@ -451,8 +451,6 @@ namespace MagicBeans3
 
                 public const string ENEMY = "ENEMY";
                 public const string NEUTRAL = "NEUTRAL";
-
-                public const string STUCK = "STUCK";
             }    
 
             public readonly SupportedModelIdentities PersonalID;
