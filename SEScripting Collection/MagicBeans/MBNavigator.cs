@@ -58,8 +58,10 @@ namespace MagicBeans2
 
             for (int i = 0; i < allOfTheThrusters.Count; i++)
             {
-                allOfTheThrusters[i].Orientation.
+                allOfTheThrusters[i].GridThrustDirection.
             }
+            IMyLargeGatlingTurret test;
+            test.
         }
 
         public void Main()
