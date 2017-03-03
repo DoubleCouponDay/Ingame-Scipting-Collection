@@ -84,7 +84,36 @@ namespace MagicBeans2
                 for (int i = 0; i < allOfTheThrusters.Count; i++)
                 {
                     Vector3I currentDirection = allOfTheThrusters[i].GridThrustDirection; 
-                    currentDirection.                    
+                    
+                    if (currentDirection == Vector3I.Up)
+                    {
+                        upThrusters.Add (allOfTheThrusters[i]);
+                    }
+
+                    else if (currentDirection == Vector3I.Down)
+                    {
+                        downThrusters.Add (allOfTheThrusters[i]);
+                    }
+
+                    else if (currentDirection == Vector3I.Left)
+                    {
+                        leftThrusters.Add (allOfTheThrusters[i]);
+                    }
+
+                    else if (currentDirection == Vector3I.Right)
+                    {
+                        rightThrusters.Add (allOfTheThrusters[i]);
+                    }
+
+                    else if (currentDirection == Vector3I.Forward)
+                    {
+                        forwardThrusters.Add (allOfTheThrusters[i]);
+                    }
+
+                    else if (currentDirection == Vector3I.Backward)
+                    {
+                        backThrusters.Add (allOfTheThrusters[i]);
+                    }
                 }
             }
 
@@ -98,7 +127,7 @@ namespace MagicBeans2
         {
             if (compiled)
             {
-                CheckForMoveInstructions();
+                CheckForInternalCommunication();
             }
 
             else
@@ -118,95 +147,26 @@ namespace MagicBeans2
             if (procedureList != null &&
                 procedureList.Length >= default (int))
             {
-                string firstItem = procedureList[default (int)];
-                Command possibleCommand = TryCreateCommand (firstItem);
+                Vector3D possibleVector;
 
-                if (possibleCommand.IsEmpty == false &&
-                    possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.INTERNAL)
+                if (Vector3D.TryParse (procedureList[default (int)], out possibleVector))
                 {
-                    ApplyCommand(possibleCommand);
+                    GoToLocation (possibleVector);
                 }
             }
             //Echo("CheckForInternalCommunication end");
         }
-
-        /// <summary>
-        /// Check the IsEmpty property to see if the returned Command is genuine.
-        /// Returns Command with everything zeroed if failed.
-        /// </summary>
-        /// <param name="serialisedCommand"></param>
-        /// <param name="possibleSuccessState"></param>
-        Command TryCreateCommand(string serialisedCommand)
+        
+        void GoToLocation (Vector3D inputLocation)
         {
-            //Echo("TryCreateCommand start");
-            Command possibleSuccessState = new Command();
-
-            if (serialisedCommand != null)
-            {
-                string[] sectionedString = serialisedCommand.Split(Names.SPACE);
-
-                if (sectionedString.Length == Command.LENGTH)
-                {
-                    int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Y);
-                    sectionedString[Command.VECTORS_INDEX].Insert (letterYPlace, Names.SPACE.ToString());
-                    int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Z); //since inserting changes the position of all letters, im going to find the next index after Insert()
-                    sectionedString[Command.VECTORS_INDEX].Insert (letterZPlace, Names.SPACE.ToString());
-
-                    Vector3D possibleVector;
-
-                    if (Vector3D.TryParse (sectionedString[Command.VECTORS_INDEX], out possibleVector))
-                    {
-                        possibleSuccessState = new Command (sectionedString[Command.SCOPES_INDEX],
-                                                            sectionedString[Command.AUDIENCES_INDEX],
-                                                            sectionedString[Command.ACTION_INDEX],
-                                                            sectionedString[Command.SUBJECT_INDEX],
-                                                            possibleVector
-                                                            );
-                    }
-                }
-            }
-            //Echo("TryCreateCommand end");
-            return possibleSuccessState;
+            Me.
+            inputLocation
         }
 
         public void Save()
         {
 
-        }
-
-        public class Command
-        {
-            public readonly bool IsEmpty;
-
-            public const int SCOPES_INDEX = 0;
-            public const int AUDIENCES_INDEX = 1;
-            public const int ACTION_INDEX = 2;
-            public const int SUBJECT_INDEX = 3;
-            public const int VECTORS_INDEX = 4;
-            public const int LENGTH = 5;
-
-            public readonly string CommunicationScope;
-            public readonly string SelectedAudience; //can be entity Id
-            public readonly string Action;
-            public readonly string Subject; //can be entity Id
-            
-            public readonly Vector3D? Location;    
-            
-            public Command()
-            {
-                IsEmpty = true;
-            }                  
-            
-            public Command (string communicationScope, string selectedAudience, string action, string subject, Vector3D location)
-            {   
-                IsEmpty = false;            
-                this.CommunicationScope = communicationScope;     
-                this.SelectedAudience = selectedAudience;
-                this.Action = action;
-                this.Subject = subject;
-                this.Location = location;                
-            } 
-        }   
+        } 
 #endregion in-game
     }    
 }
