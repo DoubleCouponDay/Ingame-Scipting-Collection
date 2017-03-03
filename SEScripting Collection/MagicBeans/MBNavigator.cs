@@ -31,6 +31,7 @@ namespace MagicBeans2
         {
             public const string SCREEN = "PRINT CONSOLE";
             public const string GYRO = "GYROSCOPE";
+            public const string REMOTE_CONTROL = "REMOTE CONTROL";
             public const string MY_CONSOLE_NAME = "MBTransceiver: ";
             public const string NEW_LINE = "\n";
             public const char COMMAND_SEPARATOR = '_';
@@ -39,7 +40,15 @@ namespace MagicBeans2
             public const string Z_CONVENTION = "Z:";
         }
 
+        static class Errors
+        {
+            public const string NO_BLOCK = "ERROR! Block(s) not found: ";
+        }
+
+        IMyRemoteControl remoteControl;
         IMyGyro gyroscope;
+        List <object> nullCheckCollection;
+
         List <IMyThrust> upThrusters;
         List <IMyThrust> downThrusters;
         List <IMyThrust> leftThrusters;
@@ -54,27 +63,110 @@ namespace MagicBeans2
         {
             int nullCounter = default (int);
             gyroscope = GridTerminalSystem.GetBlockWithName (Names.GYRO) as IMyGyro;
+            remoteControl = GridTerminalSystem.GetBlockWithName (Names.REMOTE_CONTROL) as IMyRemoteControl;
+            nullCheckCollection = new List <object>()
+            {
+                gyroscope,
+                remoteControl,
+            };
             GridTerminalSystem.GetBlocksOfType (allOfTheThrusters);
 
-            for (int i = 0; i < allOfTheThrusters.Count; i++)
+            for (int i = 0; i < nullCheckCollection.Count; i++) 
             {
-                allOfTheThrusters[i].GridThrustDirection.
+                if (nullCheckCollection[i] == null)
+                {
+                    nullCounter++;
+                }
             }
-            IMyLargeGatlingTurret test;
-            test.
+
+            if (remoteControl != null) //need to check remote exists before comparing with thrusters. pretty sure this dictates the forward direction.
+            {
+                for (int i = 0; i < allOfTheThrusters.Count; i++)
+                {
+                    Vector3I currentDirection = allOfTheThrusters[i].GridThrustDirection; 
+                    currentDirection.                    
+                }
+            }
+
+            if (nullCounter != default (int))
+            {
+                Echo (Errors.NO_BLOCK + nullCounter.ToString());
+            }
         }
 
         public void Main()
         {
             if (compiled)
             {
-
+                CheckForMoveInstructions();
             }
 
             else
             {
                 Initialise();
             }
+        }
+
+        /// <summary>
+        ///Checks custom data storage for an internal communication.
+        /// </summary>
+        void CheckForInternalCommunication()
+        {
+            //Echo("CheckForInternalCommunication start");
+            string[] procedureList = Me.CustomData.Split (Names.COMMAND_SEPARATOR);
+
+            if (procedureList != null &&
+                procedureList.Length >= default (int))
+            {
+                string firstItem = procedureList[default (int)];
+                Command possibleCommand = TryCreateCommand (firstItem);
+
+                if (possibleCommand.IsEmpty == false &&
+                    possibleCommand.CommunicationScope == CommunicationModel.CommunicationScopes.INTERNAL)
+                {
+                    ApplyCommand(possibleCommand);
+                }
+            }
+            //Echo("CheckForInternalCommunication end");
+        }
+
+        /// <summary>
+        /// Check the IsEmpty property to see if the returned Command is genuine.
+        /// Returns Command with everything zeroed if failed.
+        /// </summary>
+        /// <param name="serialisedCommand"></param>
+        /// <param name="possibleSuccessState"></param>
+        Command TryCreateCommand(string serialisedCommand)
+        {
+            //Echo("TryCreateCommand start");
+            Command possibleSuccessState = new Command();
+
+            if (serialisedCommand != null)
+            {
+                string[] sectionedString = serialisedCommand.Split(Names.SPACE);
+
+                if (sectionedString.Length == Command.LENGTH)
+                {
+                    int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Y);
+                    sectionedString[Command.VECTORS_INDEX].Insert (letterYPlace, Names.SPACE.ToString());
+                    int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Z); //since inserting changes the position of all letters, im going to find the next index after Insert()
+                    sectionedString[Command.VECTORS_INDEX].Insert (letterZPlace, Names.SPACE.ToString());
+
+                    Vector3D possibleVector;
+
+                    if (Vector3D.TryParse (sectionedString[Command.VECTORS_INDEX], out possibleVector))
+                    {
+                        possibleSuccessState = new Command (sectionedString[Command.SCOPES_INDEX],
+                                                            sectionedString[Command.AUDIENCES_INDEX],
+                                                            sectionedString[Command.ACTION_INDEX],
+                                                            sectionedString[Command.SUBJECT_INDEX],
+                                                            possibleVector
+                                                            );
+                    }
+                }
+            }
+            //Echo("TryCreateCommand end");
+            return possibleSuccessState;
         }
 
         public void Save()
