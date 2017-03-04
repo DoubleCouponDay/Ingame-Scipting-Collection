@@ -133,6 +133,7 @@
     <Compile Include="BreakPoint.cs" />
     <Compile Include="Debugger.cs" />
     <Compile Include="Elfi Wolfe%27s LIDAR.cs" />
+    <Compile Include="Gravity Aligner by p3stic1de.cs" />
     <Compile Include="massbrakes.cs" />
     <Compile Include="ProximitySelfDestruct.cs" />
     <Compile Include="morphik%27s argument component maker.cs" />

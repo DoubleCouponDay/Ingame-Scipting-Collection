@@ -5,6 +5,7 @@ using Sandbox.ModAPI.Ingame;
 using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using VRageMath;
+using System.Text;
 
 namespace MagicBeans2
 {
@@ -32,7 +33,7 @@ namespace MagicBeans2
             public const string SCREEN = "PRINT CONSOLE";
             public const string GYRO = "GYROSCOPE";
             public const string REMOTE_CONTROL = "REMOTE CONTROL";
-            public const string MY_CONSOLE_NAME = "MBTransceiver: ";
+            public const string MY_CONSOLE_NAME = "MBNavigator";
             public const string NEW_LINE = "\n";
             public const char COMMAND_SEPARATOR = '_';
             public const char SPACE = ' ';
@@ -40,7 +41,7 @@ namespace MagicBeans2
 
         static class Errors
         {
-            public const string NO_BLOCK = "ERROR! Block(s) not found: ";
+            public const string NO_BLOCK = " ERROR! Block(s) not found: ";
         }
 
         IMyRemoteControl remoteControl;
@@ -55,6 +56,8 @@ namespace MagicBeans2
         List <IMyThrust> backThrusters;
         List <IMyThrust> allOfTheThrusters;
         Dictionary <Vector3I, List <IMyThrust>> matchedThrusterDirections;
+
+        StringBuilder concatLite = new StringBuilder();
 
         bool compiled;
 
@@ -157,9 +160,11 @@ namespace MagicBeans2
             Vector3D dronesPosition = Me.CubeGrid.GetPosition();
             double twoVectorDotProduct = (dronesPosition.X * inputLocation.X) + (dronesPosition.Y * inputLocation.Y) + (dronesPosition.Z * dronesPosition.Z);
 
-            if (dronesPosition.Length() != 0.0M)
-            double angleBetween = Math.Acos (twoVectorDotProduct / (dronesPosition.Length() * inputLocation.Length()));
-            Me.CubeGrid.
+            if (dronesPosition.Length() != 0.0F)
+            {
+                double angleBetween = Math.Acos (twoVectorDotProduct / (dronesPosition.Length() * inputLocation.Length()));
+                MyBlockOrientation. remoteControl.Orientation.
+            }                        
                 //to do: pythagorean theorem in 3D to find distance to location
                 //to do: somehow get grids rotation relative to universes center 
                 //to do: then compare it with angle between two vectors. 
