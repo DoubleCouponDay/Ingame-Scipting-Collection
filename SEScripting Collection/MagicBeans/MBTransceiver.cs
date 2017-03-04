@@ -42,7 +42,7 @@ namespace MagicBeans3
         
         public void Initialise()
         {
-            //Echo("Initialise start");
+            Echo("Initialise start");
             bool allSystemsGo = true;
             int nullCount = default(int);
             concatLite = new StringBuilder();
@@ -180,12 +180,12 @@ namespace MagicBeans3
                 }
             }
             compiled = allSystemsGo;
-            //Echo("Initialise end");
+            Echo("Initialise end");
         }
 
         public void Main(string serializedCommand) //Main will always default its argument to string.Empty
         {
-            //Echo("Main start");
+            Echo("Main start");
             
             if (compiled)
             {
@@ -197,7 +197,7 @@ namespace MagicBeans3
             {
                 Initialise();
             }
-            //Echo("Main end");
+            Echo("Main end");
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace MagicBeans3
         /// <param name="input"></param>
         void AnalyseForCommand(string input)
         {
-            //Echo("AnalyseForCommand start");
+            Echo("AnalyseForCommand start");
             if (input != null)
             {
                 string noEscapes = string.Format(@"{0}", input);
@@ -219,7 +219,7 @@ namespace MagicBeans3
                     ApplyCommand(possibleCommand);
                 }
             }
-            //Echo("AnalyseForCommand end");
+            Echo("AnalyseForCommand end");
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace MagicBeans3
         /// </summary>
         void CheckForInternalCommunication()
         {
-            //Echo("CheckForInternalCommunication start");
+            Echo("CheckForInternalCommunication start");
             string[] procedureList = Me.CustomData.Split (Names.COMMAND_SEPARATOR);
 
             if (procedureList != null &&
@@ -243,7 +243,7 @@ namespace MagicBeans3
                     ApplyCommand(possibleCommand);
                 }
             }
-            //Echo("CheckForInternalCommunication end");
+            Echo("CheckForInternalCommunication end");
         }
 
         /// <summary>
@@ -254,15 +254,17 @@ namespace MagicBeans3
         /// <param name="possibleSuccessState"></param>
         Command TryCreateCommand(string serialisedCommand)
         {
-            //Echo("TryCreateCommand start");
+            Echo("TryCreateCommand start");
             Command possibleSuccessState = new Command();
 
             if (serialisedCommand != null)
             {
+                Echo ("serialisedCommand != null");
                 string[] sectionedString = serialisedCommand.Split(Names.SPACE);
 
                 if (sectionedString.Length == Command.LENGTH)
                 {
+                    Echo ("sectionedString.Length == Command.LENGTH");
                     int letterYPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Y_CONVENTION);
                     sectionedString[Command.VECTORS_INDEX].Insert (letterYPlace, Names.SPACE.ToString());
                     int letterZPlace = sectionedString[Command.VECTORS_INDEX].IndexOf (Names.Z_CONVENTION); //since inserting changes the position of all letters, im going to find the next index after Insert()
@@ -282,13 +284,13 @@ namespace MagicBeans3
                     }
                 }
             }
-            //Echo("TryCreateCommand end");
+            Echo("TryCreateCommand end");
             return possibleSuccessState;
         }
 
         void ApplyCommand(Command command)
         {
-            //Echo("ApplyCommand start");
+            Echo("ApplyCommand start");
             bool isExternal = default(bool);
             string output = string.Empty;
 
@@ -315,7 +317,7 @@ namespace MagicBeans3
             {
                 PrintToConsole(output);
             }
-            //Echo("ApplyCommand end");
+            Echo("ApplyCommand end");
         }
 
         /// <summary>
@@ -328,7 +330,7 @@ namespace MagicBeans3
         /// <returns></returns>
         string serializeOutputCommand(Command receivedCommand, string outputsScope)
         {
-            //Echo ("serializeOutputCommand Start");
+            Echo ("serializeOutputCommand Start");
             string output = string.Empty;
 
             if (outputsScope != null &&
@@ -352,7 +354,7 @@ namespace MagicBeans3
                 output = concatLite.ToString();
                 concatLite.Clear();
             }
-            //Echo ("serializeOutputCommand end");
+            Echo ("serializeOutputCommand end");
             return output;
         }
 
@@ -361,7 +363,7 @@ namespace MagicBeans3
         /// </summary>
         void PrintToConsole(string message)
         {
-            //Echo("PrintToConsole start");
+            Echo("PrintToConsole start");
             string previousPrint = console.GetPublicText(); //assuming GetPublicText() will always return string.Empty
 
             if (message != null)
@@ -374,7 +376,7 @@ namespace MagicBeans3
                 concatLite.Clear();
                 console.ShowPublicTextOnScreen();
             }
-            //Echo("PrintToConsole end");
+            Echo("PrintToConsole end");
         }
 
         public void Save()
