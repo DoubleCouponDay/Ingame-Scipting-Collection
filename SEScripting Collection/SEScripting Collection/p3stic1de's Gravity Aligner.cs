@@ -13,9 +13,6 @@ namespace stuff555555
 {
     class Program
     {
-// GRAVITY ALIGNER
-// http://steamcommunity.com/sharedfiles/filedetails/?id=567481214
-// for Space Engineers in-game scripting for Programmable block
 // public domain code by Sean L. Palmer
 
 // Planetary vehicle guidance assistance system.
