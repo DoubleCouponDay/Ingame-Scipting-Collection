@@ -36,8 +36,6 @@ namespace MagicBeans2
             public const string NEW_LINE = "\n";
             public const char COMMAND_SEPARATOR = '_';
             public const char SPACE = ' ';
-            public const string Y_CONVENTION = "Y:";
-            public const string Z_CONVENTION = "Z:";
         }
 
         static class Errors
@@ -56,7 +54,8 @@ namespace MagicBeans2
         List <IMyThrust> forwardThrusters;
         List <IMyThrust> backThrusters;
         List <IMyThrust> allOfTheThrusters;
-        
+        Dictionary <Vector3I, List <IMyThrust>> matchedThrusterDirections;
+
         bool compiled;
 
         void Initialise()
@@ -64,12 +63,23 @@ namespace MagicBeans2
             int nullCounter = default (int);
             gyroscope = GridTerminalSystem.GetBlockWithName (Names.GYRO) as IMyGyro;
             remoteControl = GridTerminalSystem.GetBlockWithName (Names.REMOTE_CONTROL) as IMyRemoteControl;
+            GridTerminalSystem.GetBlocksOfType (allOfTheThrusters);
+
+            matchedThrusterDirections = new Dictionary <Vector3I, List <IMyThrust>>()
+            {
+                { Vector3I.Up, upThrusters },
+                { Vector3I.Down, downThrusters },
+                { Vector3I.Left, leftThrusters },
+                { Vector3I.Right, rightThrusters },
+                { Vector3I.Forward, forwardThrusters },
+                { Vector3I.Backward, backThrusters },
+            };
+
             nullCheckCollection = new List <object>()
             {
                 gyroscope,
                 remoteControl,
-            };
-            GridTerminalSystem.GetBlocksOfType (allOfTheThrusters);
+            };            
 
             for (int i = 0; i < nullCheckCollection.Count; i++) 
             {
@@ -83,36 +93,16 @@ namespace MagicBeans2
             {
                 for (int i = 0; i < allOfTheThrusters.Count; i++)
                 {
-                    Vector3I currentDirection = allOfTheThrusters[i].GridThrustDirection; 
-                    
-                    if (currentDirection == Vector3I.Up)
+                    Vector3I currentDirection = allOfTheThrusters[i].GridThrustDirection;
+
+                    if (matchedThrusterDirections.ContainsKey (currentDirection))
                     {
-                        upThrusters.Add (allOfTheThrusters[i]);
+                        matchedThrusterDirections[currentDirection].Add (allOfTheThrusters[i]);
                     }
 
-                    else if (currentDirection == Vector3I.Down)
+                    else
                     {
-                        downThrusters.Add (allOfTheThrusters[i]);
-                    }
-
-                    else if (currentDirection == Vector3I.Left)
-                    {
-                        leftThrusters.Add (allOfTheThrusters[i]);
-                    }
-
-                    else if (currentDirection == Vector3I.Right)
-                    {
-                        rightThrusters.Add (allOfTheThrusters[i]);
-                    }
-
-                    else if (currentDirection == Vector3I.Forward)
-                    {
-                        forwardThrusters.Add (allOfTheThrusters[i]);
-                    }
-
-                    else if (currentDirection == Vector3I.Backward)
-                    {
-                        backThrusters.Add (allOfTheThrusters[i]);
+                        nullCounter++;
                     }
                 }
             }
@@ -144,7 +134,7 @@ namespace MagicBeans2
             //Echo("CheckForInternalCommunication start");
             string[] procedureList = Me.CustomData.Split (Names.COMMAND_SEPARATOR);
 
-            if (procedureList != null &&
+            if (procedureList.IsNullOrEmpty() == false &&
                 procedureList.Length >= default (int))
             {
                 Vector3D possibleVector;
@@ -152,15 +142,27 @@ namespace MagicBeans2
                 if (Vector3D.TryParse (procedureList[default (int)], out possibleVector))
                 {
                     GoToLocation (possibleVector);
+                  
                 }
             }
             //Echo("CheckForInternalCommunication end");
         }
         
+        /// <summary>
+        /// Goes to an input location and does not expect it to have a length or direction.  
+        /// </summary>
+        /// <param name="inputLocation"></param>
         void GoToLocation (Vector3D inputLocation)
         {
-            Me.
-            inputLocation
+            Vector3D dronesPosition = Me.CubeGrid.GetPosition();
+            double twoVectorDotProduct = (dronesPosition.X * inputLocation.X) + (dronesPosition.Y * inputLocation.Y) + (dronesPosition.Z * dronesPosition.Z);
+
+            if (dronesPosition.Length() != 0.0M)
+            double angleBetween = Math.Acos (twoVectorDotProduct / (dronesPosition.Length() * inputLocation.Length()));
+            Me.CubeGrid.
+                //to do: pythagorean theorem in 3D to find distance to location
+                //to do: somehow get grids rotation relative to universes center 
+                //to do: then compare it with angle between two vectors. 
         }
 
         public void Save()

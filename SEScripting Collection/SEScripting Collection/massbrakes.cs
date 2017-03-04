@@ -21,6 +21,7 @@ namespace Ingame_Scripting_Collection2
             IMyTerminalBlock timer = GridTerminalSystem.GetBlockWithName("mass brakes timer");
             List<IMyTerminalBlock> antenna = new List<IMyTerminalBlock>();				//only for testing 
             GridTerminalSystem.GetBlocksOfType<IMyRadioAntenna>(antenna);       			//only for testing 
+
             int iCounter = System.Convert.ToInt32(massblocks[1].CustomName); //needed to be int32 instead of int16.
 
             if (iCounter == 1)
@@ -31,9 +32,9 @@ namespace Ingame_Scripting_Collection2
 
             else if (iCounter >= 2 && drivegens != null && massblocks != null)
             {
-                double currentX = Math.Round(massblocks[0].GetPosition().GetDim(0), 4); //take the absolute value of the current dimension, rounded to 4 dp.
-                double currentY = Math.Round(massblocks[0].GetPosition().GetDim(1), 4);
-                double currentZ = Math.Round(massblocks[0].GetPosition().GetDim(2), 4);
+                double currentX = Math.Round(massblocks[0].GetPosition().X, 4); //take the absolute value of the current dimension, rounded to 4 dp.
+                double currentY = Math.Round(massblocks[0].GetPosition().Y, 4);
+                double currentZ = Math.Round(massblocks[0].GetPosition().Z, 4);
                 string sX = System.Convert.ToString(currentX);    //serialization; 0 prep data for external storage.
                 string sY = System.Convert.ToString(currentY);
                 string sZ = System.Convert.ToString(currentZ);
