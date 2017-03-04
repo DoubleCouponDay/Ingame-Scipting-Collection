@@ -259,7 +259,8 @@ namespace MagicBeans3
 
             if (serialisedCommand != null)
             {
-                Echo ("serialisedCommand != null");
+                console.WritePublicText(serialisedCommand);
+                console.ShowPublicTextOnScreen();
                 string[] sectionedString = serialisedCommand.Split(Names.SPACE);
 
                 if (sectionedString.Length == Command.LENGTH)
@@ -292,13 +293,15 @@ namespace MagicBeans3
         {
             Echo("ApplyCommand start");
             bool isExternal = default(bool);
+            bool transmissionOutcome = default(bool);
             string output = string.Empty;
 
             switch (command.CommunicationScope) //this will send received transmissions into the internal layer and internal transmissions into the radiosphere.
             {
                 case CommunicationModel.CommunicationScopes.INTERNAL:
                     output = serializeOutputCommand (command, CommunicationModel.CommunicationScopes.EXTERNAL);
-                    antenna.TransmitMessage (output);
+                    transmissionOutcome = antenna.TransmitMessage (output, MyTransmitTarget.Ally);
+                    Echo ("transmission outcome: " + transmissionOutcome.ToString());
                     break;
 
                 case CommunicationModel.CommunicationScopes.EXTERNAL:
@@ -308,7 +311,6 @@ namespace MagicBeans3
                         output = serializeOutputCommand (command, CommunicationModel.CommunicationScopes.INTERNAL);
                         definingModule.CustomData += Names.NEW_LINE + output;
                         isExternal = true;
-
                     }
                     break;
             }
@@ -316,6 +318,7 @@ namespace MagicBeans3
             if (output != string.Empty && isExternal)
             {
                 PrintToConsole(output);
+                Echo (output);
             }
             Echo("ApplyCommand end");
         }
@@ -347,9 +350,8 @@ namespace MagicBeans3
                 concatLite.Append(Names.SPACE);
 
                 string locationVector = receivedCommand.Location.ToString();
-                while (locationVector.IndexOf(Names.SPACE) != Names.NO_SPACE) {
-                    locationVector.Remove(Names.SPACE);
-                }
+                //locationVector = locationVector.Replace(" ", String.Empty);
+                
                 concatLite.Append(locationVector);
                 output = concatLite.ToString();
                 concatLite.Clear();
