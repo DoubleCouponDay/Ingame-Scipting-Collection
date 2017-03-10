@@ -14,7 +14,7 @@ namespace MagicBeans
         {
             while (true)
             {
-                test.main ("hmm");
+                test.Main ("hmm");
             }
         }
     }

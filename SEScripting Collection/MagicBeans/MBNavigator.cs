@@ -91,7 +91,7 @@ namespace MagicBeans2
                     nullCounter++;
                 }
             }
-
+  
             if (remoteControl != null) //need to check remote exists before comparing with thrusters. pretty sure this dictates the forward direction.
             {
                 for (int i = 0; i < allOfTheThrusters.Count; i++)
@@ -158,16 +158,24 @@ namespace MagicBeans2
         void GoToLocation (Vector3D inputLocation)
         {
             Vector3D dronesPosition = Me.CubeGrid.GetPosition();
-            double twoVectorDotProduct = (dronesPosition.X * inputLocation.X) + (dronesPosition.Y * inputLocation.Y) + (dronesPosition.Z * dronesPosition.Z);
+            double twoVectorsDotProduct = (dronesPosition.X * inputLocation.X) + (dronesPosition.Y * inputLocation.Y) + (dronesPosition.Z * dronesPosition.Z);
 
             if (dronesPosition.Length() != 0.0F)
             {
-                double angleBetween = Math.Acos (twoVectorDotProduct / (dronesPosition.Length() * inputLocation.Length()));
-                MyBlockOrientation. remoteControl.Orientation.
-            }                        
+                double angleBetween = Math.Acos (twoVectorsDotProduct / (dronesPosition.Length() * inputLocation.Length()));
+            }            
+
+
+
                 //to do: pythagorean theorem in 3D to find distance to location
                 //to do: somehow get grids rotation relative to universes center 
                 //to do: then compare it with angle between two vectors. 
+        }
+
+        void GetShipsRelativeRotation()
+        {            
+            Matrix currentOrientation;           
+            remoteControl.Orientation.GetMatrix (out currentOrientation);
         }
 
         public void Save()
