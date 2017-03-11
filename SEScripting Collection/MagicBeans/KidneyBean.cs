@@ -22,7 +22,32 @@ namespace MagicBeans15
 
         public Program()
         {
+            CommunicationModel kidneyBeanModel = new CommunicationModel
+            (
+                CommunicationModel.SupportedModelIdentities.KIDNEYBEAN,
 
+                new string[]
+                {
+                    CommunicationModel.Audiences.BEANSTALK,
+                },
+
+                new string[]
+                {
+                    CommunicationModel.JobActions.FOLLOW,
+                },
+
+                new string[]
+                {
+                    CommunicationModel.PriorityActions.ATTACK,
+                    CommunicationModel.PriorityActions.GOTO,
+                },
+
+                new string[]
+                {
+                    CommunicationModel.Subjects.ENEMY,
+                    CommunicationModel.Subjects.NEUTRAL,
+                }
+            );
         }
 
         public void Main()

@@ -22,6 +22,39 @@ namespace MagicBeans5
         public Program()
         {
 
+            CommunicationModel limaBeanModel = new CommunicationModel
+            (
+                CommunicationModel.SupportedModelIdentities.LIMABEAN,
+
+                new string[]
+                {
+                    CommunicationModel.Audiences.BEANSTALK,
+                },
+
+                new string[]
+                {
+                    CommunicationModel.JobActions.MINE,
+                    CommunicationModel.JobActions.FOLLOW,
+                },
+
+                new string[]
+                {
+                    CommunicationModel.PriorityActions.GOTO,
+                },
+
+                new string[]
+                {
+                    CommunicationModel.Subjects.GOLD,
+                    CommunicationModel.Subjects.ICE,
+                    CommunicationModel.Subjects.IRON,
+                    CommunicationModel.Subjects.MAGNESIUM,
+                    CommunicationModel.Subjects.NICKEL,
+                    CommunicationModel.Subjects.PLATINUM,
+                    CommunicationModel.Subjects.SILICON,
+                    CommunicationModel.Subjects.SILVER,
+                    CommunicationModel.Subjects.URANIUM,
+                }
+            );
         }
 
         public void Main()

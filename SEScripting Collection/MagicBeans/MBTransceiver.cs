@@ -59,93 +59,6 @@ namespace MagicBeans3
             allModules = new List <IMyProgrammableBlock>();
             GridTerminalSystem.GetBlocksOfType (allModules);
 
-            CommunicationModel beanStalkModel = new CommunicationModel 
-            (
-                CommunicationModel.SupportedModelIdentities.BEANSTALK,
-
-                new string[]
-                {
-                    CommunicationModel.Audiences.BEANSTALK,
-                    CommunicationModel.Audiences.LIMABEAN,
-                    CommunicationModel.Audiences.KIDNEYBEAN,
-                },
-
-                new string[] {},
-
-                new string[]
-                {
-                    CommunicationModel.PriorityActions.NETWORK,
-                    CommunicationModel.PriorityActions.HELP,
-                },
-
-                new string[]
-                {
-                    CommunicationModel.Audiences.BEANSTALK,
-                    CommunicationModel.Subjects.ENEMY,
-                }
-            );
-
-            CommunicationModel kidneyBeanModel = new CommunicationModel
-            (
-                CommunicationModel.SupportedModelIdentities.KIDNEYBEAN,
-
-                new string[]
-                {
-                    CommunicationModel.Audiences.BEANSTALK,
-                },
-
-                new string[]
-                {
-                    CommunicationModel.JobActions.FOLLOW,
-                },
-
-                new string[]
-                {
-                    CommunicationModel.PriorityActions.ATTACK,
-                    CommunicationModel.PriorityActions.GOTO,
-                },
-
-                new string[]
-                {
-                    CommunicationModel.Subjects.ENEMY,
-                    CommunicationModel.Subjects.NEUTRAL,
-                }
-            );
-
-            CommunicationModel limaBeanModel = new CommunicationModel
-            (
-                CommunicationModel.SupportedModelIdentities.LIMABEAN,
-
-                new string[]
-                {
-                    CommunicationModel.Audiences.BEANSTALK,
-                },
-
-                new string[]
-                {
-                    CommunicationModel.JobActions.MINE,
-                    CommunicationModel.JobActions.FOLLOW,
-                },
-
-                new string[]
-                {
-                    CommunicationModel.PriorityActions.GOTO,
-                },
-
-                new string[]
-                {
-                    CommunicationModel.Subjects.GOLD,
-                    CommunicationModel.Subjects.ICE,
-                    CommunicationModel.Subjects.IRON,
-                    CommunicationModel.Subjects.MAGNESIUM,
-                    CommunicationModel.Subjects.NICKEL,
-                    CommunicationModel.Subjects.PLATINUM,
-                    CommunicationModel.Subjects.SILICON,
-                    CommunicationModel.Subjects.SILVER,
-                    CommunicationModel.Subjects.URANIUM,
-                }
-            );
-
             for (int i = 0; i < allModules.Count; i++)
             {
                 if (allModules[i].CustomName == CommunicationModel.Audiences.KIDNEYBEAN ||
@@ -229,6 +142,7 @@ namespace MagicBeans3
         {
             Echo("CheckForInternalCommunication start");
             string[] procedureList = Me.CustomData.Split (Names.COMMAND_SEPARATOR);
+Echo ("CustomData: "+ Me.CustomData);
 
             if (procedureList != null &&
                 procedureList.Length >= default (int))
@@ -259,10 +173,8 @@ namespace MagicBeans3
 
             if (serialisedCommand != null)
             {
-                console.WritePublicText(serialisedCommand);
-                console.ShowPublicTextOnScreen();
                 string[] sectionedString = serialisedCommand.Split(Names.SPACE);
-
+Echo (sectionedString.Length.ToString());
                 if (sectionedString.Length == Command.LENGTH)
                 {
                     Echo ("sectionedString.Length == Command.LENGTH");

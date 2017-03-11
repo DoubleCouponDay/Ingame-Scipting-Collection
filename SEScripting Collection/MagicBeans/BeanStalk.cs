@@ -22,7 +22,31 @@ namespace MagicBeans18
 
         public Program()
         {
+            CommunicationModel beanStalkModel = new CommunicationModel 
+            (
+                CommunicationModel.SupportedModelIdentities.BEANSTALK,
 
+                new string[]
+                {
+                    CommunicationModel.Audiences.BEANSTALK,
+                    CommunicationModel.Audiences.LIMABEAN,
+                    CommunicationModel.Audiences.KIDNEYBEAN,
+                },
+
+                new string[] {},
+
+                new string[]
+                {
+                    CommunicationModel.PriorityActions.NETWORK,
+                    CommunicationModel.PriorityActions.HELP,
+                },
+
+                new string[]
+                {
+                    CommunicationModel.Audiences.BEANSTALK,
+                    CommunicationModel.Subjects.ENEMY,
+                }
+            );
         }
 
         public void Main()
