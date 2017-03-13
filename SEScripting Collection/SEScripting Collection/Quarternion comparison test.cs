@@ -76,29 +76,31 @@ Echo ("initialise end");
 Echo ("main start");
             if (compiled)
             {
-                Vector3D myPosition = Me.CubeGrid.GetPosition();
-                Vector3D difference = myPosition - testLocation;
-                Vector3D rightSomething = Vector3D.Cross (Vector3D.UnitY, myPosition);
-                Vector3D backwards = Vector3D.Normalize (rightSomething);
-                Vector3D up = Vector3D.Cross (backwards, rightSomething);
-                Matrix rotatedTowardsTarget = new Matrix ((float) rightSomething.X, (float) rightSomething.Y, (float) rightSomething.Z, 0, (float) up.X, (float) up.Y, (float) up.Z, 0, (float) backwards.X, (float) backwards.Y, (float) backwards.Z, 0, 0, 0, 0, 1);
-                
-                printConsole.WritePublicText 
-                (
-                    "MY MATRIX: \n" + 
-                    rotatedTowardsTarget.M11 + " " + rotatedTowardsTarget.M12 + " " + rotatedTowardsTarget.M13 + " " + rotatedTowardsTarget.M14 + "\n" +
-                    rotatedTowardsTarget.M21 + " " + rotatedTowardsTarget.M22 + " " + rotatedTowardsTarget.M23 + " " + rotatedTowardsTarget.M24 + "\n" +
-                    rotatedTowardsTarget.M31 + " " + rotatedTowardsTarget.M32 + " " + rotatedTowardsTarget.M33 + " " + rotatedTowardsTarget.M34 + "\n" +
-                    rotatedTowardsTarget.M41 + " " + rotatedTowardsTarget.M42 + " " + rotatedTowardsTarget.M43 + " " + rotatedTowardsTarget.M44 + "\n"
-                );
+                MatrixD shipsOrientation = Me.CubeGrid.WorldMatrix.GetOrientation();
+                QuaternionD matrixToQuat = QuaternionD.CreateFromRotationMatrix (shipsOrientation);
 
+                printConsole.WritePublicText
+                (
+                    "ships orientation matrix: \n" + 
+                    matrixToQuat.ToString()
+                );
+                string test = "{X:-0.552343986629085 Y:0.709696766479144 Z:0.418826034501225 W:0.125822948609039}";
+/*
                 targetsConsole.WritePublicText
                 (
-                    "TARGETS MATRIX: \n" +                    
-                    remoteControl.WorldMatrix.M11 + " " + remoteControl.WorldMatrix.M12 + " " + remoteControl.WorldMatrix.M13 + " " + remoteControl.WorldMatrix.M14 + "\n" +
-                    remoteControl.WorldMatrix.M21 + " " + remoteControl.WorldMatrix.M22 + " " + remoteControl.WorldMatrix.M23 + " " + remoteControl.WorldMatrix.M24 + "\n" +
-                    remoteControl.WorldMatrix.M31 + " " + remoteControl.WorldMatrix.M32 + " " + remoteControl.WorldMatrix.M33 + " " + remoteControl.WorldMatrix.M34 + "\n" +
-                    remoteControl.WorldMatrix.M41 + " " + remoteControl.WorldMatrix.M42 + " " + remoteControl.WorldMatrix.M43 + " " + remoteControl.WorldMatrix.M44 + "\n"
+                    "ships world matrix: \n" +
+                    Me.CubeGrid.WorldMatrix.ToString()
+                );
+                */
+
+  /*       
+                printConsole.WritePublicText 
+                (
+                    "SHIPS ORIENTATION: \n" + 
+                    shipsOrientation.M11 + " " + shipsOrientation.M12 + " " + shipsOrientation.M13 + " " + shipsOrientation.M14 + "\n" +
+                    shipsOrientation.M21 + " " + shipsOrientation.M22 + " " + shipsOrientation.M23 + " " + shipsOrientation.M24 + "\n" +
+                    shipsOrientation.M31 + " " + shipsOrientation.M32 + " " + shipsOrientation.M33 + " " + shipsOrientation.M34 + "\n" +
+                    shipsOrientation.M41 + " " + shipsOrientation.M42 + " " + shipsOrientation.M43 + " " + shipsOrientation.M44 + "\n"
                 );
                 printConsole.ShowPublicTextOnScreen();
                 targetsConsole.ShowPublicTextOnScreen();
