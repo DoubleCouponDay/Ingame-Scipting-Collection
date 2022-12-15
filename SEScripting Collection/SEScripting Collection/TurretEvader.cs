@@ -22,8 +22,8 @@ namespace Ingame_Scripting_Collection7
         bool first_time = true;
         bool end_program = true;
         int state = 0;
-        const float maxOverride = 576000.0f;
-        const float gravityFactor = 5.0f;
+        const float maxOverride = 500000.0f;
+        const float gravityFactor = 1000.0f;
         bool isAtmospheric = false;
 
         void Main (string argument)
@@ -107,7 +107,7 @@ namespace Ingame_Scripting_Collection7
         
                 case 2:
                     state = 3;
-                    ChangeOverride (up, true);
+                    ChangeOverride (up, true, true);
                     ChangeOverride (left, false);
                     Echo ("up");
                     break;
@@ -121,7 +121,7 @@ namespace Ingame_Scripting_Collection7
             
                 case 4:
                     state = 1;
-                    ChangeOverride (down, true, true);
+                    ChangeOverride (down, true);
                     ChangeOverride (right, false);
                     Echo ("down");
                     break;
@@ -129,15 +129,16 @@ namespace Ingame_Scripting_Collection7
         }
 
         //this function will change thrust override based on argument inputs.
-        void ChangeOverride (List <IMyTerminalBlock> thruster_face, bool isOn, bool isDown = false)
+        void ChangeOverride (List <IMyTerminalBlock> thruster_face, bool isOn, bool goingDown = false)
         {
             for (int a = 0; a < thruster_face.Count; a++)
             {
                 if (isOn)
                 {
-                    if (isAtmospheric && isDown)
+                    if (isAtmospheric && goingDown)
                     {
-                        thruster_face[a].SetValueFloat("Override", (float)(maxOverride / gravityFactor));
+                        float reducedOverride = maxOverride / gravityFactor;
+                        thruster_face[a].SetValueFloat("Override", reducedOverride);
                     }
 
                     else
