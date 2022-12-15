@@ -71,7 +71,6 @@ ipch/
 *.vsp
 *.vspx
 *.dll
-*.csproj
 
 # Guidance Automation Toolkit
 *.gpState
