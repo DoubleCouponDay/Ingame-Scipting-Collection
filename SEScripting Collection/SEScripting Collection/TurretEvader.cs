@@ -11,7 +11,7 @@ namespace Ingame_Scripting_Collection7
         #endregion PRE_SCRIPT
         //auto turret evasion script
         //
-        //bug 1: if you travel too fast towards the turret, it will catch your predictable vector.
+        // if you travel too fast towards the turret, it will catch your predictable vector.
 
         List <IMyTerminalBlock> thrusters = new List <IMyTerminalBlock>();
         List <IMyTerminalBlock> left = new List <IMyTerminalBlock>();
@@ -157,6 +157,7 @@ namespace Ingame_Scripting_Collection7
                 thrusters[a].SetValueFloat ("Override", 0.0f); 
                 thrusters[a].ApplyAction ("OnOff_On");
             }
+            timer.ApplyAction("Stop");
         }
 #region POST_SCRIPT
     }    
