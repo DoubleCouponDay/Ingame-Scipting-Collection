@@ -42,6 +42,7 @@ namespace Ingame_Scripting_Collection7
 
             else if(argument == "run atmo")
             {
+                end_program = false;
                 isAtmospheric = true;
             }
     
