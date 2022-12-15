@@ -22,6 +22,9 @@ namespace Ingame_Scripting_Collection7
         bool first_time = true;
         bool end_program = true;
         int state = 0;
+        const float maxOverride = 576000.0f;
+        const float gravityFactor = 5.0f;
+        bool isAtmospheric = false;
 
         void Main (string argument)
         {
@@ -34,6 +37,12 @@ namespace Ingame_Scripting_Collection7
             if (argument == "run")
             {
                 end_program = false;
+                isAtmospheric = false;
+            }
+
+            else if(argument == "run atmo")
+            {
+                isAtmospheric = true;
             }
     
             else if (argument == "stop")
@@ -90,59 +99,55 @@ namespace Ingame_Scripting_Collection7
             {
                 case 1:
                     state = 2;
-                    ChangeOverride (left, "on", "no");
-                    ChangeOverride (down, "off", "no");
-                    ChangeOverride (up, "on", "yes"); // i have to separately turn on up thrusters so that damps will affect down.
+                    ChangeOverride (left, true);
+                    ChangeOverride (down, false);
                     Echo ("left");
                     break;
         
                 case 2:
                     state = 3;
-                    ChangeOverride (up, "on", "no");
-                    ChangeOverride (left, "off", "no");
+                    ChangeOverride (up, true);
+                    ChangeOverride (left, false);
                     Echo ("up");
                     break;
             
                 case 3:
                     state = 4;
-                    ChangeOverride (right, "on", "no");
-                    ChangeOverride (up, "off", "no");
+                    ChangeOverride (right, true);
+                    ChangeOverride (up, false);
                     Echo ("right");
                     break;
             
                 case 4:
                     state = 1;
-                    ChangeOverride (down, "on", "no");
-                    ChangeOverride (up, "off", "yes"); // i have to separately turn off up thrusters so that damps wont affect down.
-                    ChangeOverride (right, "off", "no");
+                    ChangeOverride (down, true, true);
+                    ChangeOverride (right, false);
                     Echo ("down");
                     break;
             }
         }
 
         //this function will change thrust override based on argument inputs.
-        void ChangeOverride (List <IMyTerminalBlock> thruster_face, string on_off, string damps_toggle)
+        void ChangeOverride (List <IMyTerminalBlock> thruster_face, bool isOn, bool isDown = false)
         {
             for (int a = 0; a < thruster_face.Count; a++)
             {
-                if (on_off == "off" && damps_toggle == "no")
+                if (isOn)
                 {
-                    thruster_face[a].SetValueFloat ("Override", 0.0F);
+                    if (isAtmospheric && isDown)
+                    {
+                        thruster_face[a].SetValueFloat("Override", (float)(maxOverride / gravityFactor));
+                    }
+
+                    else
+                    {
+                        thruster_face[a].SetValueFloat("Override", maxOverride);
+                    }
                 }	
         
-                else if (on_off == "on" && damps_toggle == "no")
+                else
                 {
-                    thruster_face[a].SetValueFloat ("Override", 80000.0F);
-                }
-        
-                else if (on_off == "off" && damps_toggle == "yes")
-                {
-                    up[a].ApplyAction ("OnOff_Off");
-                }
-        
-                else if (on_off == "on" && damps_toggle == "yes")
-                {
-                    up[a].ApplyAction ("OnOff_On");
+                    thruster_face[a].SetValueFloat("Override", 0.0F);
                 }
             }
         }
