@@ -9,27 +9,53 @@ using VRage.Game;
 using System.Collections.ObjectModel;
 using VRage.Game.ModAPI.Ingame;
 
-namespace SingleScript2
+public class Gonzalez : MyGridProgram
 {
-    public class Gonzalez : MyGridProgram
+    #region in-game
+
+    bool firstTime = true;
+    IMyCameraBlock top;
+    IMyCameraBlock bot;
+
+    public void Setup()
     {
-        #region in-game
+        Runtime.UpdateFrequency = UpdateFrequency.Update1;
+        var cameraList = new List<IMyCameraBlock>();
+        GridTerminalSystem.GetBlocksOfType<IMyCameraBlock>(cameraList);
 
-        public Gonzalez()
+        if (true)
         {
 
         }
-
-        public void Main()
-        {
-
-        }
-
-        public void Save()
-        {
-
-        }
-        #endregion in-game
+        var firstOne = cameraList[0];
+        var secondOne = cameraList[1];
     }
-}
 
+    public void Main()
+    {
+        if (firstTime)
+        {
+            firstTime = false;
+            bool outcome = Setup();
+
+            if(outcome == false)
+            {
+                Echo("Setup failed");
+                return;
+            }                
+        }
+    }
+
+    void BalanceGyros()
+    {
+
+    }
+
+    void 
+
+    public void Save()
+    {
+
+    }
+    #endregion in-game
+}
