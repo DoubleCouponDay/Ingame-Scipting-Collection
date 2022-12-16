@@ -7,26 +7,23 @@ using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 using VRage.Game;
 
-namespace MagicBeans6665
+public class Factory : MyGridProgram
 {
-    public class Program : MyGridProgram
-    {
 #region in-game
 
-        public Program()
-        {
+    public Factory()
+    {
 
-        }
-
-        public void Main()
-        {
-
-        }
-
-        public void Save()
-        {
-
-        }
-#endregion in-game
     }
+
+    public void Main()
+    {
+
+    }
+
+    public void Save()
+    {
+
+    }
+#endregion in-game
 }

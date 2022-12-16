@@ -7,26 +7,23 @@ using VRageMath;
 using VRage.Game;
 using System.Collections.ObjectModel;
 
-namespace MagicBeans3687458456
+public class EvasiveManeuvers : MyGridProgram
 {
-    public class Program : MyGridProgram
-    {
 #region in-game
 
-        public Program()
-        {
+    public EvasiveManeuvers()
+    {
 
-        }
-
-        public void Main()
-        {
-
-        }
-
-        public void Save()
-        {
-
-        }
-#endregion in-game
     }
+
+    public void Main()
+    {
+
+    }
+
+    public void Save()
+    {
+
+    }
+#endregion in-game
 }
