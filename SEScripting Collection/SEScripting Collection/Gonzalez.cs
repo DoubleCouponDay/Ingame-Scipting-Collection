@@ -9,24 +9,27 @@ using VRage.Game;
 using System.Collections.ObjectModel;
 using VRage.Game.ModAPI.Ingame;
 
-public class Template : MyGridProgram
+namespace SingleScript2
 {
-#region in-game
-
-    public Template()
+    public class Gonzalez : MyGridProgram
     {
+        #region in-game
 
+        public Gonzalez()
+        {
+
+        }
+
+        public void Main()
+        {
+
+        }
+
+        public void Save()
+        {
+
+        }
+        #endregion in-game
     }
-
-    public void Main()
-    {
-
-    }
-
-    public void Save()
-    {
-
-    }
-#endregion in-game
-}  
+}
 

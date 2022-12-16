@@ -6,61 +6,58 @@ using SpaceEngineers.Game.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using VRageMath;
 
-namespace SingleScripts1
+class SelfDestruct : MyGridProgram
 {
-    class Program : MyGridProgram
-    {
 #region in-game
 
 /*instructions: 
- * place sensor and timer on ship.
- * place PB and warhead on merge block so that they drop when the merge block detaches.
- * place power source on ship NOT ON MERGE BLOCK.
- * sensor must trigger the merge block if it detects hostile.
- */
-        const float COUNTDOWN = 3.0F;
+* place sensor and timer on ship.
+* place PB and warhead on merge block so that they drop when the merge block detaches.
+* place power source on ship NOT ON MERGE BLOCK.
+* sensor must trigger the merge block if it detects hostile.
+*/
+    const float COUNTDOWN = 3.0F;
 
-        IMySensorBlock sensor;
-        IMyShipMergeBlock mergeBlock;
-        IMyWarhead bomb;
-        IMyTimerBlock timer;
+    IMySensorBlock sensor;
+    IMyShipMergeBlock mergeBlock;
+    IMyWarhead bomb;
+    IMyTimerBlock timer;
 
-        public Program()
+    public SelfDestruct()
+    {
+        sensor = GridTerminalSystem.GetBlockWithName ("SENSOR") as IMySensorBlock;
+        mergeBlock = GridTerminalSystem.GetBlockWithName ("MERGE_BLOCK") as IMyShipMergeBlock;
+        bomb = GridTerminalSystem.GetBlockWithName ("BOMB") as IMyWarhead;
+        timer = GridTerminalSystem.GetBlockWithName ("TIMER") as IMyTimerBlock;
+    }
+
+    public void main()
+    {
+        if (sensor != null)
         {
-            sensor = GridTerminalSystem.GetBlockWithName ("SENSOR") as IMySensorBlock;
-            mergeBlock = GridTerminalSystem.GetBlockWithName ("MERGE_BLOCK") as IMyShipMergeBlock;
-            bomb = GridTerminalSystem.GetBlockWithName ("BOMB") as IMyWarhead;
-            timer = GridTerminalSystem.GetBlockWithName ("TIMER") as IMyTimerBlock;
-        }
-
-        public void main()
-        {
-            if (sensor != null)
+            if (sensor.IsFunctional)
             {
-                if (sensor.IsFunctional)
-                {
-                    bomb.SetValueFloat ("Countdown", COUNTDOWN);    
-                    bomb.SetValueBool ("Safety", false);
-                    bomb.ApplyAction ("StartCountdown");
+                bomb.SetValueFloat ("Countdown", COUNTDOWN);    
+                bomb.SetValueBool ("Safety", false);
+                bomb.ApplyAction ("StartCountdown");
                     
-                }
-
-                else
-                {
-                    DetachBrain();
-                }
             }
 
             else
             {
-                DetachBrain(); 
-            }            
+                DetachBrain();
+            }
         }
 
-        private void DetachBrain()
+        else
         {
-            mergeBlock.ApplyAction ("OnOff_Off");
-        }
-        #endregion in-game
-    }    
-}
+            DetachBrain(); 
+        }            
+    }
+
+    private void DetachBrain()
+    {
+        mergeBlock.ApplyAction ("OnOff_Off");
+    }
+    #endregion in-game
+}    

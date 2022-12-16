@@ -8,31 +8,29 @@ using VRage.Game;
 using VRage.Game.ModAPI.Ingame;
 using System.Text;
 
-namespace Ingame_Scripting_Collection4
+class LIDAR : MyGridProgram
 {
-    class Program : MyGridProgram
-    {
 #region in-game
-        //------------------------------------------------------------
-        // ADN - Easy Lidar Homing Script v3.0
-        //------------------------------------------------------------
+    //------------------------------------------------------------
+    // ADN - Easy Lidar Homing Script v3.0
+    //------------------------------------------------------------
 
-        //----- Refer To Steam Workshop Discussion Section For Variables Definition -----
-        //
-        //  [This sets the default missile launch type. Overridable by single trigger Run Action with Arguments MODE:<missileLaunchType> before starting Timer Loop]
-        //
-        //  0 = Lidar Homing Mode using launching ship's R_LIDAR for initial lock-on and R_FORWARD for aiming.
-        //  1 = Lidar Homing Mode using coordinates from launching ship's R_TARGET for initial lock-on.
-        //  2 = Lidar Homing Mode using launching ship's R_LIDAR for initial lock-on and R_FORWARD for aiming with initial Camera Guidance.
-        //  3 = Camera Guided Mode using launching ship's R_FORWARD for direction tracking. R_FORWARD can also be a Turret.
-        //  4 = Cruise Mode using launching ship's R_TARGET as GPS coordinates.
-        //  5 = Offset Lidar Homing Mode using launching ship's R_LIDAR for initial lock-on and R_FORWARD for aiming.
-        //  6 = Fixed Glide Mode using launching ship's R_FORWARD for one time aiming, then continues to glide on that fixed direction.
-        //  7 = Lidar Homing Mode solely using launching ship's R_LIDAR for lock-on and R_FORWARD for aiming (Semi-Active Style Guidance).
-        //  8 = Turret AI Homing Mode using missile's mounted turret for guidance.
-        //  99 = Launch missile in Dummy Mode. This is used for testing if the missile detaches properly at the correct connection and display missile detected configurations.
-        //
-        int missileLaunchType = 0;
+    //----- Refer To Steam Workshop Discussion Section For Variables Definition -----
+    //
+    //  [This sets the default missile launch type. Overridable by single trigger Run Action with Arguments MODE:<missileLaunchType> before starting Timer Loop]
+    //
+    //  0 = Lidar Homing Mode using launching ship's R_LIDAR for initial lock-on and R_FORWARD for aiming.
+    //  1 = Lidar Homing Mode using coordinates from launching ship's R_TARGET for initial lock-on.
+    //  2 = Lidar Homing Mode using launching ship's R_LIDAR for initial lock-on and R_FORWARD for aiming with initial Camera Guidance.
+    //  3 = Camera Guided Mode using launching ship's R_FORWARD for direction tracking. R_FORWARD can also be a Turret.
+    //  4 = Cruise Mode using launching ship's R_TARGET as GPS coordinates.
+    //  5 = Offset Lidar Homing Mode using launching ship's R_LIDAR for initial lock-on and R_FORWARD for aiming.
+    //  6 = Fixed Glide Mode using launching ship's R_FORWARD for one time aiming, then continues to glide on that fixed direction.
+    //  7 = Lidar Homing Mode solely using launching ship's R_LIDAR for lock-on and R_FORWARD for aiming (Semi-Active Style Guidance).
+    //  8 = Turret AI Homing Mode using missile's mounted turret for guidance.
+    //  99 = Launch missile in Dummy Mode. This is used for testing if the missile detaches properly at the correct connection and display missile detected configurations.
+    //
+    int missileLaunchType = 0;
 
 //Type of block to disconnect missile from launching ship: 0 = Merge Block, 1 = Rotor, 2 = Connector, 3 = Merge Block And Any Locked Connectors, 4 = Rotor And Any Locked Connectors, 99 = No detach required
 int missileDetachPortType = 0;
@@ -3707,6 +3705,5 @@ vectorSum += vectorArr[i];
 }
 }
 }
-        #endregion in-game
-    }
+    #endregion in-game
 }
