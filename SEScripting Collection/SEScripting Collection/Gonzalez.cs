@@ -8,6 +8,7 @@ using VRageMath;
 using VRage.Game;
 using System.Collections.ObjectModel;
 using VRage.Game.ModAPI.Ingame;
+using System.Diagnostics.SymbolStore;
 
 public class Gonzalez : MyGridProgram
 {
@@ -17,17 +18,13 @@ public class Gonzalez : MyGridProgram
      * reference: https://github.com/tommallama/CSharp-PID
      */
     const double samplePeriod = 1/60;
+    const double minimumHeight = 5.0f;
 
-    double previousOutput = 3.0f;
-
-    double rollup1, rollup2, rollup3, rollup4, rollup5, rollup6, rollup7;
-    double output1, output2, output3;
-    double error1, error2, error3;
+    double error1, error2, error3, error4, error5;
 
     double proportionalGain;
     double integralGain;
     double derivativeGain;
-    double filterCoefficient;
 
     bool firstTime = true;
     bool stopped = false;
@@ -107,15 +104,12 @@ public class Gonzalez : MyGridProgram
         }
         var strings = input.Split(',');
         proportionalGain = double.Parse(strings[0]); //proportional gain
-        integralGain = double.Parse(strings[0]); //integral gain
-        derivativeGain = double.Parse(strings[0]); //derivative gain
-        filterCoefficient = double.Parse(strings[0]); //filter coefficient
+        integralGain = double.Parse(strings[1]); //integral gain
+        derivativeGain = double.Parse(strings[2]); //derivative gain
     }
 
-    double GetElevation()
-    {
-        double elevation;
-        bool outcome1 = controller.TryGetPlanetElevation(MyPlanetElevation.Surface, out elevation);
+    double GetElevation() {
+        bool outcome1 = controller.TryGetPlanetElevation(MyPlanetElevation.Surface, out double elevation);
 
         if (outcome1 == false)
         {
@@ -132,34 +126,50 @@ public class Gonzalez : MyGridProgram
 
         if (speed <= 10.0f)
         {
-            return 3.0f;
+            return minimumHeight;
         }
 
         else if (speed <= 50.0f)
         {
-            return 5.0f;
+            return minimumHeight + 2;
         }
 
         else if (speed <= 100.0f)
         {
-            return 7.0f;
+            return minimumHeight + 2 * 2;
         }
 
         else if (speed <= 150.0f)
         {
-            return 9.0f;
+            return minimumHeight + 2 * 3;
         }
 
         else
         {
-            return 11.0f;
+            return minimumHeight + 2 * 4;
         }
     }
 
-    void PIDThrust(double setPoint, double processValue)
+    void PIDThrust(double setPoint, double currentAltitude)
     {
-       double tao = previousOutput / 
-       double P = 1.2 / proportionalGain * 
+        double error = currentAltitude - setPoint;
+        //set history back by 1
+        error5 = error4;
+        error4 = error3;
+        error3 = error2;
+        error2 = error1;
+        error1 = error;
+
+        double P = proportionalGain * error;
+
+        //trapezoidal rule to find the integral component
+        double Isum = samplePeriod / 2;
+
+        for(int i = 0; i < 5; i++) {
+            Isum += 
+        }
+
+        double I = integralGain * Isum;
     }
     #endregion in-game
 }
