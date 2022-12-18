@@ -116,7 +116,8 @@ public class Gonzalez : MyGridProgram
     }
 
     double GetElevation() {
-        bool outcome1 = controller.TryGetPlanetElevation(MyPlanetElevation.Surface, out double elevation);
+        double elevation;
+        bool outcome1 = controller.TryGetPlanetElevation(MyPlanetElevation.Surface, out elevation);
 
         if (outcome1 == false)
         {
