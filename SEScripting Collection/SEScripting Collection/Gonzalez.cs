@@ -25,11 +25,12 @@ public class Gonzalez : MyGridProgram
     double integralGain = 1;
     double derivativeGain = 10;
 
+    bool firstTime = true;
     bool stopped = false;
     IMyThrust thruster;
     IMyRemoteControl controller;
 
-    public void Program()
+    public void Setup()
     {
         Runtime.UpdateFrequency = UpdateFrequency.Update1;
 
@@ -75,7 +76,13 @@ public class Gonzalez : MyGridProgram
 
     public void Main(string arg)
     {
-        if (arg != "stop" && stopped == true)
+        if (firstTime)
+        {
+            firstTime = false;
+            Setup();
+        }
+
+        if (arg != "stop" && arg != string.Empty)
         {
             stopped = false;
             controller.DampenersOverride = false;
