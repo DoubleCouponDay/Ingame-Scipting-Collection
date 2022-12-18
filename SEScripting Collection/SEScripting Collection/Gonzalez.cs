@@ -29,13 +29,13 @@ public class Gonzalez : MyGridProgram
     bool firstTime = true;
     bool stopped = false;
     IMyThrust thruster;
-    IMyShipController controller;
+    IMyRemoteControl controller;
 
     public void Setup()
     {
         Runtime.UpdateFrequency = UpdateFrequency.Update1;
 
-        var controllers = new List<IMyShipController>();
+        var controllers = new List<IMyRemoteControl>();
         GridTerminalSystem.GetBlocksOfType(controllers);
 
         if (controllers.Count == 0)
@@ -47,16 +47,10 @@ public class Gonzalez : MyGridProgram
 
         for (int i = 0; i < controllers.Count; i++)
         {
-            var potentialCast = controllers[i] as IMyRemoteControl;
-
-            if (potentialCast == null)
-            {
-                continue;
-            }
+            Echo($"current: {controllers[i]}");
             controller = controllers[i];
         }
         Echo($"controller count: {controllers.Count}");
-        controller = controllers[0];
         Echo($"controller value: {controller}");
         controller.ApplyAction("OnOff_On");
         Echo("6");
