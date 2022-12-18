@@ -44,18 +44,8 @@ public class Gonzalez : MyGridProgram
             Echo(message);
             throw new Exception(message);
         }
-
-        for (int i = 0; i < controllers.Count; i++)
-        {
-            Echo($"current: {controllers[i]}");
-            controller = controllers[i];
-        }
-        Echo($"controller count: {controllers.Count}");
-        Echo($"controller value: {controller}");
-        controller.ApplyAction("OnOff_On");
-        Echo("6");
+        controller = controllers[0];
         controller.DampenersOverride = false;
-        Echo("3");
         var thrusterList = new List<IMyThrust>();
         GridTerminalSystem.GetBlocksOfType(thrusterList);
         Echo("4");
