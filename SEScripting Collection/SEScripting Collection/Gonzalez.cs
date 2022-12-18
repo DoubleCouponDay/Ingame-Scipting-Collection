@@ -38,25 +38,40 @@ public class Gonzalez : MyGridProgram
         var controllers = new List<IMyShipController>();
         GridTerminalSystem.GetBlocksOfType(controllers);
 
-        if (controllers.Count  == 0)
+        if (controllers.Count == 0)
         {
             string message = "remote control not found";
             Echo(message);
             throw new Exception(message);
         }
-        controller = controllers[0];
-        controller.ApplyAction("OnOff_On");
-        controller.DampenersOverride = false;
 
+        for (int i = 0; i < controllers.Count; i++)
+        {
+            var potentialCast = controllers[i] as IMyRemoteControl;
+
+            if (potentialCast == null)
+            {
+                continue;
+            }
+            controller = controllers[i];
+        }
+        Echo($"controller count: {controllers.Count}");
+        controller = controllers[0];
+        Echo($"controller value: {controller}");
+        controller.ApplyAction("OnOff_On");
+        Echo("6");
+        controller.DampenersOverride = false;
+        Echo("3");
         var thrusterList = new List<IMyThrust>();
         GridTerminalSystem.GetBlocksOfType(thrusterList);
-
+        Echo("4");
         if (thrusterList.Count == 0)
         {
             string message = "thrusters not found";
             Echo(message);
             throw new Exception(message);
         }
+        Echo("9");
 
         for (int i = 0; i < thrusterList.Count; i++)
         {
@@ -67,6 +82,7 @@ public class Gonzalez : MyGridProgram
                 thruster = current;
             }
         }
+        Echo("10");
 
         if (thruster == null)
         {
