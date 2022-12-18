@@ -79,7 +79,13 @@ public class Gonzalez : MyGridProgram
 
     public void Main(string arg)
     {
-        if (arg == "stop" || stopped == true)
+        if (arg != "stop" && arg != string.Empty)
+        {
+            stopped = false;
+            controller.DampenersOverride = false;
+        }
+
+        else if (arg == "stop" || stopped == true)
         {
             stopped = true; //prevents queued executions from interfering with a stop
 
