@@ -46,6 +46,7 @@ public class Gonzalez : MyGridProgram
         }
         controller = controllers[0];
         controller.ApplyAction("OnOff_On");
+        controller.DampenersOverride = false;
 
         var thrusterList = new List<IMyThrust>();
         GridTerminalSystem.GetBlocksOfType(thrusterList);
@@ -85,6 +86,7 @@ public class Gonzalez : MyGridProgram
             if (thruster != null)
             {
                 thruster.ThrustOverridePercentage = 0.0f;
+                controller.DampenersOverride = true;
             }
             return;
         }
