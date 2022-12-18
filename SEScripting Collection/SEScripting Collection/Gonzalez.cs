@@ -20,7 +20,7 @@ public class Gonzalez : MyGridProgram
     const double samplePeriod = 1/60;
     const double minimumHeight = 5.0f;
 
-    double error1, error2, error3, error4, error5;
+    double[] errors = new double[5];
 
     double proportionalGain;
     double integralGain;
@@ -81,6 +81,11 @@ public class Gonzalez : MyGridProgram
         if (arg == "stop" || stopped == true)
         {
             stopped = true; //prevents queued executions from interfering with a stop
+
+            if (thruster != null)
+            {
+                thruster.ThrustOverridePercentage = 0.0f;
+            }
             return;
         }
 
@@ -117,59 +122,67 @@ public class Gonzalez : MyGridProgram
             Echo(message);
             throw new Exception(message);
         }
+        Echo($"elevation: {elevation}");
         return elevation;
     }
 
     double GetSetPoint()
     {
         double speed = controller.GetShipSpeed();
+        double output;
 
         if (speed <= 10.0f)
         {
-            return minimumHeight;
+            output = minimumHeight;
         }
 
         else if (speed <= 50.0f)
         {
-            return minimumHeight + 2;
+            output = minimumHeight + 2;
         }
 
         else if (speed <= 100.0f)
         {
-            return minimumHeight + 2 * 2;
+            output = minimumHeight + 2 * 2;
         }
 
         else if (speed <= 150.0f)
         {
-            return minimumHeight + 2 * 3;
+            output = minimumHeight + 2 * 3;
         }
 
         else
         {
-            return minimumHeight + 2 * 4;
+            output = minimumHeight + 2 * 4;
         }
+        Echo($"setpoint: {output}");
+        return output;
     }
 
     void PIDThrust(double setPoint, double currentAltitude)
     {
-        double error = currentAltitude - setPoint;
-        //set history back by 1
-        error5 = error4;
-        error4 = error3;
-        error3 = error2;
-        error2 = error1;
-        error1 = error;
+        double error = setPoint - currentAltitude;
 
+        errors[4] = errors[3];
+        errors[3] = errors[2];
+        errors[2] = errors[1];
+        errors[1] = errors[0];
+        errors[0] = error;
+        
         double P = proportionalGain * error;
 
         //trapezoidal rule to find the integral component
-        double Isum = samplePeriod / 2;
+        double I = samplePeriod / 2;
+        I += errors[4] + errors[0];
 
-        for(int i = 0; i < 5; i++) {
-            Isum += 
+        for (int i = 1; i < errors.Length - 1; i++)
+        {
+            I += 2 * integralGain * errors[i] * samplePeriod;
         }
 
-        double I = integralGain * Isum;
+        double D = derivativeGain * (error - errors[1]) / samplePeriod;
+
+        thruster.ThrustOverridePercentage = (float)(P + I + D);
     }
     #endregion in-game
 }
