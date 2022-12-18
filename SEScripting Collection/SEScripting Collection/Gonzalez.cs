@@ -16,8 +16,8 @@ public class Gonzalez : MyGridProgram
     /**
      * reference: https://github.com/tommallama/CSharp-PID
      */
-    const double samplePeriod = 1/60;
-    const double minimumHeight = 5.0f;
+    const double samplePeriod = 1.0f/60.0f;
+    const double minimumHeight = 10.0f;
 
     double[] errors = new double[5];
 
@@ -186,8 +186,11 @@ public class Gonzalez : MyGridProgram
         {
             I += 2 * integralGain * errors[i] * samplePeriod;
         }
-
         double D = derivativeGain * (error - errors[1]) / samplePeriod;
+
+        Echo($"P: {P}");
+        Echo($"I: {I}");
+        Echo($"D: {D}");
 
         thruster.ThrustOverridePercentage = (float)(P + I + D);
     }
