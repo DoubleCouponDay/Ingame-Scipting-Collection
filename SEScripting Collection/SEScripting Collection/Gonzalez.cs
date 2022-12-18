@@ -21,9 +21,9 @@ public class Gonzalez : MyGridProgram
 
     double[] errors = new double[5];
 
-    double proportionalGain;
-    double integralGain;
-    double derivativeGain;
+    double proportionalGain = 1;
+    double integralGain = 1;
+    double derivativeGain = 10;
 
     bool firstTime = true;
     bool stopped = false;
@@ -82,15 +82,15 @@ public class Gonzalez : MyGridProgram
             Setup();
         }
 
-        if (arg != "stop" && arg != string.Empty)
+        if (arg != "stop")
         {
             stopped = false;
             controller.DampenersOverride = false;
         }
 
-        else if (arg == "stop" || stopped == true)
+        else if (arg == "stop")
         {
-            stopped = true; //prevents queued executions from interfering with a stop
+            stopped = true;
 
             if (thruster != null)
             {
