@@ -79,6 +79,12 @@ public class Gonzalez : MyGridProgram
 
     public void Main(string arg)
     {
+        if (firstTime)
+        {
+            firstTime = false;
+            Setup();
+        }
+
         if (arg != "stop" && arg != string.Empty)
         {
             stopped = false;
@@ -97,11 +103,6 @@ public class Gonzalez : MyGridProgram
             return;
         }
 
-        if (firstTime)
-        {
-            firstTime = false;
-            Setup();     
-        }
         ParseArguments(arg);
         double setPoint = GetSetPoint();
         double elevation = GetElevation();
