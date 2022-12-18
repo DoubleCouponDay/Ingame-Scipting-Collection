@@ -12,7 +12,6 @@ using System.Diagnostics.SymbolStore;
 
 public class Gonzalez : MyGridProgram
 {
-
     #region in-game
     /**
      * reference: https://github.com/tommallama/CSharp-PID
@@ -48,14 +47,13 @@ public class Gonzalez : MyGridProgram
         controller.DampenersOverride = false;
         var thrusterList = new List<IMyThrust>();
         GridTerminalSystem.GetBlocksOfType(thrusterList);
-        Echo("4");
+        
         if (thrusterList.Count == 0)
         {
             string message = "thrusters not found";
             Echo(message);
             throw new Exception(message);
         }
-        Echo("9");
 
         for (int i = 0; i < thrusterList.Count; i++)
         {
@@ -66,7 +64,6 @@ public class Gonzalez : MyGridProgram
                 thruster = current;
             }
         }
-        Echo("10");
 
         if (thruster == null)
         {
