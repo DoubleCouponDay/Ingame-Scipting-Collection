@@ -29,6 +29,7 @@ public class Gonzalez : MyGridProgram
     bool stopped = false;
     IMyThrust thruster;
     IMyRemoteControl controller;
+    IMyCameraBlock camera;
 
     public void Setup()
     {
@@ -50,7 +51,7 @@ public class Gonzalez : MyGridProgram
         
         if (thrusterList.Count == 0)
         {
-            string message = "thrusters not found";
+            string message = "thruster not found";
             Echo(message);
             throw new Exception(message);
         }
@@ -72,6 +73,19 @@ public class Gonzalez : MyGridProgram
             throw new Exception(message);
         }
         thruster.Enabled = true;
+
+        var cameras = new List<IMyCameraBlock>();
+        GridTerminalSystem.GetBlocksOfType(cameras);
+
+        if (cameras.Count == 0)
+        {
+            string message = "camera not found";
+            Echo(message);
+            throw new Exception(message);
+        }
+        camera = cameras[0];
+        camera.Enabled = true;
+        camera.EnableRaycast = true;
     }
 
     public void Main(string arg)
@@ -120,6 +134,7 @@ public class Gonzalez : MyGridProgram
     }
 
     double GetElevation() {
+        double output;
         double elevation;
         bool outcome1 = controller.TryGetPlanetElevation(MyPlanetElevation.Surface, out elevation);
 
@@ -130,7 +145,24 @@ public class Gonzalez : MyGridProgram
             throw new Exception(message);
         }
         Echo($"elevation: {elevation}");
-        return elevation;
+
+        double scanDistance = -1.0f;
+
+        if (camera.CanScan(elevation) && camera.TimeUntilScan(elevation) == 0)
+        {
+            var scanResult = camera.Raycast(elevation);
+            var hitPosition = scanResult.HitPosition;
+
+            if (hitPosition != null)
+            {
+                var currentPosition = Me.Position;
+                Vector3D difference = new Vector3D(hitPosition.Value.X - currentPosition.X, hitPosition.Value.Y - currentPosition.Y, hitPosition.Value.Z - currentPosition.Z);
+                scanDistance = difference.Length();
+            }
+        }
+        Echo($"scanDistance: {scanDistance}");
+        output = (scanDistance != -1.0f && scanDistance < elevation) ? scanDistance : elevation; //raycast succeeded and has a closer distance
+        return output;
     }
 
     double GetSetPoint()
