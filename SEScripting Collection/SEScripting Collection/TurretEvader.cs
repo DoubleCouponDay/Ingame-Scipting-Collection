@@ -9,6 +9,9 @@ public class TurretEvader : MyGridProgram
 {
     #region script
 
+    const int SECOND = 10;
+    const int HALF_SECOND = 5;
+
     List <IMyTerminalBlock> thrusters = new List <IMyTerminalBlock>();
     List <IMyTerminalBlock> left = new List <IMyTerminalBlock>();
     List <IMyTerminalBlock> up = new List <IMyTerminalBlock>();
@@ -23,7 +26,7 @@ public class TurretEvader : MyGridProgram
         second
     }
 
-    frequency currentFrequency = frequency.half;
+    frequency currentFrequency = frequency.second;
     int tickCount;
     int tickMax;
 
@@ -104,6 +107,9 @@ public class TurretEvader : MyGridProgram
                     break;
             }
         }
+        currentFrequency = frequency.second;
+        Runtime.UpdateFrequency = UpdateFrequency.Update100;
+        tickMax = SECOND;
     }
 
     void ParseArgument(string input)
@@ -128,12 +134,12 @@ public class TurretEvader : MyGridProgram
 
             case frequency.half:
                 Runtime.UpdateFrequency = UpdateFrequency.Update100;
-                tickMax = 5;
+                tickMax = HALF_SECOND;
                 break;
 
             case frequency.second:
                 Runtime.UpdateFrequency = UpdateFrequency.Update100;
-                tickMax = 10;
+                tickMax = SECOND;
                 break;
 
             default:
