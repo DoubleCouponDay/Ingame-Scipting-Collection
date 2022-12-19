@@ -112,7 +112,7 @@ public class TurretEvader : MyGridProgram
         {
             return;
         }
-        var parsed = Enum.Parse(typeof(frequency), input);
+        var parsed = (frequency)Enum.Parse(typeof(frequency), input);
         tickMax = 0;
 
         switch (parsed)
