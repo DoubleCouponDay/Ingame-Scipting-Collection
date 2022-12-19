@@ -17,7 +17,8 @@ public class Gonzalez : MyGridProgram
      * reference: https://github.com/tommallama/CSharp-PID
      */
     const double samplePeriod = 1.0f/60.0f;
-    const double minimumHeight = 10.0f;
+    const double minimumHeight = 2.0f;
+    const double heightMultiplier = 8.0f;
 
     double[] errors = new double[5];
 
@@ -155,7 +156,7 @@ public class Gonzalez : MyGridProgram
 
             if (hitPosition != null)
             {
-                var currentPosition = Me.Position;
+                var currentPosition = Me.GetPosition();
                 Vector3D difference = new Vector3D(hitPosition.Value.X - currentPosition.X, hitPosition.Value.Y - currentPosition.Y, hitPosition.Value.Z - currentPosition.Z);
                 scanDistance = difference.Length();
             }
@@ -177,22 +178,22 @@ public class Gonzalez : MyGridProgram
 
         else if (speed <= 50.0f)
         {
-            output = minimumHeight + 2;
+            output = minimumHeight + heightMultiplier;
         }
 
         else if (speed <= 100.0f)
         {
-            output = minimumHeight + 2 * 2;
+            output = minimumHeight + heightMultiplier * 2;
         }
 
         else if (speed <= 150.0f)
         {
-            output = minimumHeight + 2 * 3;
+            output = minimumHeight + heightMultiplier * 3;
         }
 
         else
         {
-            output = minimumHeight + 2 * 4;
+            output = minimumHeight + heightMultiplier * 4;
         }
         Echo($"setpoint: {output}");
         return output;
