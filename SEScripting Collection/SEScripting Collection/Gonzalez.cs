@@ -101,6 +101,7 @@ public class Gonzalez : MyGridProgram
         {
             stopped = false;
             controller.DampenersOverride = false;
+            Runtime.UpdateFrequency = UpdateFrequency.Update1;
         }
 
         else if (arg == "stop" || stopped == true)
@@ -112,6 +113,7 @@ public class Gonzalez : MyGridProgram
                 thruster.ThrustOverridePercentage = 0.0f;
                 controller.DampenersOverride = true;
             }
+            Runtime.UpdateFrequency = UpdateFrequency.None;
             return;
         }
 
@@ -119,7 +121,6 @@ public class Gonzalez : MyGridProgram
         double setPoint = GetSetPoint();
         double elevation = GetElevation();
         PIDThrust(setPoint, elevation);
-        Me.TryRun(string.Empty);
     }
 
     void ParseArguments(string input)
