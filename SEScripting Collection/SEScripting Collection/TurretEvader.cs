@@ -1,4 +1,4 @@
-﻿#region PRE_SCRIPT
+﻿
 using System;
 using System.Collections.Generic;
 
@@ -212,5 +212,5 @@ public class TurretEvader : MyGridProgram
         Runtime.UpdateFrequency = UpdateFrequency.None;
         tickMax = 0;
     }
-    #region script
+    #endregion script
 }
