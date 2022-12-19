@@ -114,6 +114,7 @@ public class TurretEvader : MyGridProgram
         }
         var parsed = (frequency)Enum.Parse(typeof(frequency), input);
         tickMax = 0;
+        currentFrequency = parsed;
 
         switch (parsed)
         {
