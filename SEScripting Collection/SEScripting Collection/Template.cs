@@ -13,7 +13,7 @@ public class Template : MyGridProgram
 {
 #region in-game
 
-    public void Program()
+    public Program()
     {
 
     }
