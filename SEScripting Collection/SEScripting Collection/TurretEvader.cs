@@ -47,11 +47,13 @@ public class TurretEvader : MyGridProgram
 
         if (argument == "run")
         {
+            Echo("running in zero g");
             isAtmospheric = false;
         }
 
         else if(argument == "run atmo")
         {
+            Echo("running in atmosphere");
             isAtmospheric = true;
         }
     
@@ -64,15 +66,16 @@ public class TurretEvader : MyGridProgram
         else
         {
             ParseArgument(argument);
-        }        
+        }
 
         if (tickCount <= 0)
         {
             tickCount = tickMax;
             ApplyState();
         }
-        
         tickCount--;
+        Echo($"tickCount: {tickCount}");
+        Echo($"tickmax: {tickMax}");
     }
 
     //this function will fetch objects from terminal only once in order to save performance.
@@ -110,17 +113,20 @@ public class TurretEvader : MyGridProgram
         currentFrequency = frequency.second;
         Runtime.UpdateFrequency = UpdateFrequency.Update100;
         tickMax = SECOND;
+        Echo("initialized");
     }
 
     void ParseArgument(string input)
     {
         if (input == string.Empty)
         {
+            Echo("argument empty");
             return;
         }
         var parsed = (frequency)Enum.Parse(typeof(frequency), input);
         tickMax = 0;
         currentFrequency = parsed;
+        Echo($"frequency: {parsed}");
 
         switch (parsed)
         {
@@ -129,17 +135,16 @@ public class TurretEvader : MyGridProgram
                 break;
 
             case frequency.tenth:
-                Runtime.UpdateFrequency = UpdateFrequency.Update100;
+                Runtime.UpdateFrequency = UpdateFrequency.Update10;
                 break;
 
             case frequency.half:
-                Runtime.UpdateFrequency = UpdateFrequency.Update100;
+                Runtime.UpdateFrequency = UpdateFrequency.Update10;
                 tickMax = HALF_SECOND;
                 break;
 
             case frequency.second:
                 Runtime.UpdateFrequency = UpdateFrequency.Update100;
-                tickMax = SECOND;
                 break;
 
             default:
@@ -218,6 +223,7 @@ public class TurretEvader : MyGridProgram
         }
         Runtime.UpdateFrequency = UpdateFrequency.None;
         tickMax = 0;
+        Echo("vessel stopped");
     }
     #endregion script
 }
